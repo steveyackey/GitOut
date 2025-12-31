@@ -4,12 +4,12 @@ using GitOut.Application.Interfaces;
 namespace GitOut.Infrastructure.Persistence;
 
 /// <summary>
-/// Saves and loads game progress as JSON files
+/// Saves and loads game progress as JSON files.
+/// Uses source-generated serialization for AOT compatibility.
 /// </summary>
 public class JsonProgressRepository : IProgressRepository
 {
     private readonly string _saveFilePath;
-    private readonly JsonSerializerOptions _jsonOptions;
 
     public JsonProgressRepository(string? saveDirectory = null)
     {
@@ -24,12 +24,6 @@ public class JsonProgressRepository : IProgressRepository
         }
 
         _saveFilePath = Path.Combine(gitoutDirectory, "save.json");
-
-        _jsonOptions = new JsonSerializerOptions
-        {
-            WriteIndented = true,
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        };
     }
 
     public async Task SaveProgressAsync(GameProgress progress)
@@ -41,7 +35,8 @@ public class JsonProgressRepository : IProgressRepository
 
         try
         {
-            var json = JsonSerializer.Serialize(progress, _jsonOptions);
+            // Use source-generated serializer for AOT compatibility
+            var json = JsonSerializer.Serialize(progress, GameProgressContext.Default.GameProgress);
             await File.WriteAllTextAsync(_saveFilePath, json);
         }
         catch (Exception ex)
@@ -60,7 +55,8 @@ public class JsonProgressRepository : IProgressRepository
         try
         {
             var json = await File.ReadAllTextAsync(_saveFilePath);
-            var progress = JsonSerializer.Deserialize<GameProgress>(json, _jsonOptions);
+            // Use source-generated deserializer for AOT compatibility
+            var progress = JsonSerializer.Deserialize(json, GameProgressContext.Default.GameProgress);
             return progress;
         }
         catch (Exception ex)

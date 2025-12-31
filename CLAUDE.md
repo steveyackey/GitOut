@@ -579,3 +579,53 @@ public async Task<Dictionary<string, Room>> LoadRoomsAsync()
 - No merge conflicts - different files
 - Better IDE navigation and searchability
 - Room 23 (Final Boss) is largest at ~550 lines due to complex multi-step validation
+
+## Commit Message Convention
+
+This project uses **Conventional Commits** for all commit messages. Format:
+
+```
+<type>[optional scope]: <description>
+
+[optional body]
+
+[optional footer(s)]
+```
+
+### Types
+- `feat`: New feature (MINOR version bump)
+- `fix`: Bug fix (PATCH version bump)
+- `docs`: Documentation only changes
+- `style`: Code style (formatting, semicolons, etc.)
+- `refactor`: Code change that neither fixes a bug nor adds a feature
+- `perf`: Performance improvement
+- `test`: Adding or updating tests
+- `build`: Build system or dependencies
+- `ci`: CI/CD configuration
+- `chore`: Other changes (version bumps, etc.)
+
+### Breaking Changes
+Use `!` after type/scope for breaking changes (MAJOR version bump):
+```
+feat!: remove deprecated filter-branch support
+feat(room)!: change room ID format
+```
+
+Or include `BREAKING CHANGE:` in footer.
+
+### Scope Suggestions
+- `room` - Room factories and content
+- `challenge` - Challenge types and validation
+- `engine` - GameEngine and command processing
+- `ui` - Console rendering and input
+- `save` - Progress persistence
+- `git` - Git command execution
+
+### Examples
+```
+feat(room): add Room 24 for git worktree advanced scenarios
+fix(challenge): correct validation logic for merge conflicts
+docs: update README with installation instructions
+build: enable Native AOT compilation
+ci: add GitHub Actions release workflow
+```

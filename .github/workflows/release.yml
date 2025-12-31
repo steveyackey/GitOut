@@ -1,0 +1,171 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+env:
+  DOTNET_VERSION: '10.0.x'
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Publish Windows x64
+        run: |
+          dotnet publish src/GitOut.Console/GitOut.Console.csproj `
+            -c Release `
+            -r win-x64 `
+            --self-contained `
+            -o publish/win-x64
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: gitout-win-x64
+          path: publish/win-x64/
+
+  build-linux-x64:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Publish Linux x64
+        run: |
+          dotnet publish src/GitOut.Console/GitOut.Console.csproj \
+            -c Release \
+            -r linux-x64 \
+            --self-contained \
+            -o publish/linux-x64
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: gitout-linux-x64
+          path: publish/linux-x64/
+
+  build-linux-arm64:
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Publish Linux ARM64
+        run: |
+          dotnet publish src/GitOut.Console/GitOut.Console.csproj \
+            -c Release \
+            -r linux-arm64 \
+            --self-contained \
+            -o publish/linux-arm64
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: gitout-linux-arm64
+          path: publish/linux-arm64/
+
+  build-macos-arm64:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Publish macOS ARM64
+        run: |
+          dotnet publish src/GitOut.Console/GitOut.Console.csproj \
+            -c Release \
+            -r osx-arm64 \
+            --self-contained \
+            -o publish/osx-arm64
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: gitout-macos-arm64
+          path: publish/osx-arm64/
+
+  build-docker:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract version from tag
+        id: version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}:${{ steps.version.outputs.VERSION }}
+            ghcr.io/${{ github.repository }}:latest
+
+  create-release:
+    needs: [build-windows, build-linux-x64, build-linux-arm64, build-macos-arm64, build-docker]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Package artifacts
+        run: |
+          cd artifacts
+          zip -r ../gitout-win-x64.zip gitout-win-x64/
+          tar -czvf ../gitout-linux-x64.tar.gz gitout-linux-x64/
+          tar -czvf ../gitout-linux-arm64.tar.gz gitout-linux-arm64/
+          tar -czvf ../gitout-macos-arm64.tar.gz gitout-macos-arm64/
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            gitout-win-x64.zip
+            gitout-linux-x64.tar.gz
+            gitout-linux-arm64.tar.gz
+            gitout-macos-arm64.tar.gz
+          generate_release_notes: true

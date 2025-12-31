@@ -17,7 +17,7 @@ public class Room22RewriteReliquaryFactory
     {
         var challenge = new RepositoryChallenge(
             id: "rewrite-reliquary-challenge",
-            description: "Use git filter-branch to remove a sensitive file from all commits in the repository's history",
+            description: "Use git filter-repo (or filter-branch in this simulation) to remove a sensitive file from all commits in the repository's history",
             gitExecutor: _gitExecutor,
             requireGitInit: true,
             customSetup: async (workingDir, gitExec) =>
@@ -55,7 +55,7 @@ public class Room22RewriteReliquaryFactory
                 await gitExec.ExecuteAsync("add config.example.js", workingDir);
                 await gitExec.ExecuteAsync("commit -m \"Add example config\"", workingDir);
 
-                // Create instructions file
+                // Create instructions file - Updated to focus on filter-repo
                 await File.WriteAllTextAsync(Path.Combine(workingDir, "DANGER_INSTRUCTIONS.txt"),
                     "═══════════════════════════════════════════════════════════════\n" +
                     "⚠️  THE REWRITE RELIQUARY - HISTORY REWRITING CHALLENGE  ⚠️\n" +
@@ -66,72 +66,106 @@ public class Room22RewriteReliquaryFactory
                     "Worse, you've made several more commits since then.\n\n" +
                     "Simply deleting the file now won't help - it's still in the git history!\n" +
                     "Anyone who clones this repository can access those secrets from past commits.\n\n" +
-                    "CRITICAL WARNINGS:\n" +
+                    "═══════════════════════════════════════════════════════════════\n" +
+                    "               THE MODERN SOLUTION: git filter-repo\n" +
+                    "═══════════════════════════════════════════════════════════════\n\n" +
+                    "git filter-repo is the RECOMMENDED tool for rewriting git history.\n" +
+                    "It replaces the deprecated git filter-branch command.\n\n" +
+                    "WHY filter-repo OVER filter-branch?\n" +
+                    "  • 10-100x FASTER than filter-branch\n" +
+                    "  • SAFER with built-in protections against data loss\n" +
+                    "  • SIMPLER syntax and better error messages\n" +
+                    "  • MAINTAINED actively (filter-branch is deprecated)\n" +
+                    "  • RECOMMENDED by the Git project itself\n\n" +
+                    "INSTALLATION:\n" +
+                    "  macOS:    brew install git-filter-repo\n" +
+                    "  Ubuntu:   apt install git-filter-repo\n" +
+                    "  Fedora:   dnf install git-filter-repo\n" +
+                    "  pip:      pip install git-filter-repo\n" +
+                    "  Manual:   Copy git-filter-repo to your PATH\n" +
+                    "            https://github.com/newren/git-filter-repo\n\n" +
+                    "THE COMMAND:\n" +
+                    "  git filter-repo --path secrets.txt --invert-paths\n\n" +
+                    "  NOTE: filter-repo requires a FRESH CLONE by default.\n" +
+                    "  Use --force to override: git filter-repo --path secrets.txt --invert-paths --force\n\n" +
+                    "WHAT THIS DOES:\n" +
+                    "  --path secrets.txt     : Select this file for filtering\n" +
+                    "  --invert-paths         : REMOVE selected paths (keep everything else)\n" +
+                    "  --force                : Run even if not a fresh clone (use with caution)\n\n" +
+                    "OTHER USEFUL filter-repo OPTIONS:\n" +
+                    "  --path-glob '*.log'              : Remove all .log files\n" +
+                    "  --strip-blobs-bigger-than 10M    : Remove files larger than 10MB\n" +
+                    "  --replace-text <file>            : Replace text patterns from file\n" +
+                    "  --mailmap <file>                 : Rewrite author/committer info\n" +
+                    "  --analyze                        : Generate reports without modifying repo\n" +
+                    "  --dry-run                        : Preview changes without applying\n\n" +
+                    "═══════════════════════════════════════════════════════════════\n" +
+                    "              GAME SIMULATION NOTE\n" +
+                    "═══════════════════════════════════════════════════════════════\n\n" +
+                    "Since git filter-repo requires separate installation, this game\n" +
+                    "uses filter-branch to simulate the challenge. In the real world,\n" +
+                    "ALWAYS use filter-repo instead!\n\n" +
+                    "FOR THIS CHALLENGE, USE:\n" +
+                    "  git filter-branch --force --index-filter \\\n" +
+                    "    'git rm --cached --ignore-unmatch secrets.txt' \\\n" +
+                    "    --prune-empty --tag-name-filter cat -- --all\n\n" +
+                    "(Or on Windows without line continuation:)\n" +
+                    "  git filter-branch --force --index-filter \"git rm --cached --ignore-unmatch secrets.txt\" --prune-empty --tag-name-filter cat -- --all\n\n" +
+                    "═══════════════════════════════════════════════════════════════\n" +
+                    "              WHY filter-branch IS DEPRECATED\n" +
+                    "═══════════════════════════════════════════════════════════════\n\n" +
+                    "The Git project deprecated filter-branch because:\n\n" +
+                    "1. EXTREMELY SLOW\n" +
+                    "   filter-branch spawns a shell for each commit, making it\n" +
+                    "   orders of magnitude slower than filter-repo.\n\n" +
+                    "2. GOTCHAS AND FOOTGUNS\n" +
+                    "   - Creates backup refs that preserve old history\n" +
+                    "   - Complex quoting requirements across platforms\n" +
+                    "   - Silent failures in many edge cases\n" +
+                    "   - Can corrupt repos if interrupted\n\n" +
+                    "3. CONFUSING OUTPUT\n" +
+                    "   The output is cryptic and hard to understand.\n\n" +
+                    "4. NO SAFETY CHECKS\n" +
+                    "   filter-branch will happily destroy your repo if you\n" +
+                    "   make a mistake. filter-repo requires a fresh clone.\n\n" +
+                    "═══════════════════════════════════════════════════════════════\n" +
+                    "                    CRITICAL WARNINGS\n" +
+                    "═══════════════════════════════════════════════════════════════\n\n" +
                     "⚠️  History rewriting is DANGEROUS and should ONLY be done on:\n" +
                     "   • Local repositories that have NEVER been pushed\n" +
-                    "   • Repositories where you have absolute control and can force-push\n" +
-                    "   • Commits that have NOT been shared with others\n\n" +
+                    "   • Repositories where you can force-push safely\n" +
+                    "   • With team coordination if history was shared\n\n" +
                     "⚠️  NEVER rewrite history that others have based work on!\n" +
                     "   • It will break everyone else's repositories\n" +
-                    "   • They'll need to force-pull or re-clone\n" +
-                    "   • Ongoing work may be lost or conflict\n\n" +
-                    "⚠️  This rewrites ALL commits - commit hashes will CHANGE!\n" +
+                    "   • They'll need to re-clone\n" +
+                    "   • Ongoing work may be lost\n\n" +
+                    "⚠️  All commit hashes will CHANGE!\n" +
                     "   • Any references to old commits will break\n" +
-                    "   • Pull requests, issue references, documentation will be invalid\n\n" +
-                    "YOUR MISSION:\n" +
-                    "Remove 'secrets.txt' from ALL commits in the repository history.\n" +
-                    "After successful rewriting:\n" +
-                    "  • The file should not exist in ANY commit\n" +
-                    "  • The file should not appear in git log\n" +
-                    "  • All other files should remain intact\n\n" +
-                    "THE COMMAND:\n" +
-                    "git filter-branch --force --index-filter \\\n" +
-                    "  'git rm --cached --ignore-unmatch secrets.txt' \\\n" +
-                    "  --prune-empty --tag-name-filter cat -- --all\n\n" +
-                    "WHAT THIS DOES:\n" +
-                    "  --force                  : Force the operation even if backup exists\n" +
-                    "  --index-filter 'CMD'     : Run CMD on the index (staging area) of each commit\n" +
-                    "  git rm --cached          : Remove file from index (staging area)\n" +
-                    "  --ignore-unmatch         : Don't fail if file doesn't exist in this commit\n" +
-                    "  secrets.txt              : The file to remove\n" +
-                    "  --prune-empty            : Remove commits that become empty after filtering\n" +
-                    "  --tag-name-filter cat    : Rewrite tags to point to new commits\n" +
-                    "  -- --all                 : Apply to all branches and tags\n\n" +
-                    "ALTERNATIVE APPROACHES:\n" +
-                    "1. Use tree-filter (slower but more flexible):\n" +
-                    "   git filter-branch --tree-filter 'rm -f secrets.txt' HEAD\n\n" +
-                    "2. Use filter-repo (modern, recommended tool - not in core git):\n" +
-                    "   git filter-repo --path secrets.txt --invert-paths\n" +
-                    "   NOTE: Requires separate installation: pip install git-filter-repo\n\n" +
-                    "3. Use BFG Repo-Cleaner (fast, user-friendly):\n" +
-                    "   bfg --delete-files secrets.txt\n\n" +
-                    "VERIFICATION:\n" +
-                    "After running filter-branch, verify the file is gone:\n" +
-                    "  git log --all --full-history -- secrets.txt\n" +
-                    "  (Should return empty - no commits touching secrets.txt)\n\n" +
-                    "  git log --oneline\n" +
-                    "  (Check that commits exist but with new hashes)\n\n" +
-                    "CLEANUP:\n" +
-                    "After successful rewrite, git creates backup refs:\n" +
-                    "  .git/refs/original/\n" +
-                    "To fully remove the data:\n" +
-                    "  rm -rf .git/refs/original/\n" +
-                    "  git reflog expire --expire=now --all\n" +
-                    "  git gc --prune=now --aggressive\n\n" +
-                    "MODERN RECOMMENDATION:\n" +
-                    "git filter-branch is deprecated. For production use, prefer:\n" +
-                    "  • git filter-repo (faster, safer, more features)\n" +
-                    "  • BFG Repo-Cleaner (simpler interface)\n" +
-                    "However, filter-branch is still useful for understanding the concepts!\n\n" +
-                    "WHEN TO USE THIS:\n" +
-                    "  ✓ Remove accidentally committed secrets/passwords\n" +
-                    "  ✓ Remove large binary files that bloat repository\n" +
-                    "  ✓ Split a monorepo into separate repositories\n" +
-                    "  ✓ Change author information across all commits\n" +
-                    "  ✗ NEVER on shared/pushed history without team coordination\n\n" +
+                    "   • PR/issue references become invalid\n\n" +
+                    "⚠️  If secrets were ever pushed, ASSUME THEY'RE COMPROMISED!\n" +
+                    "   • Rotate credentials IMMEDIATELY\n" +
+                    "   • Removing from history doesn't undo exposure\n\n" +
                     "═══════════════════════════════════════════════════════════════\n" +
-                    "Ready to rewrite history? Remember: with great power comes\n" +
-                    "great responsibility. Use this knowledge wisely!\n" +
+                    "                    YOUR MISSION\n" +
+                    "═══════════════════════════════════════════════════════════════\n\n" +
+                    "1. Examine the repository: git log --oneline\n" +
+                    "2. Verify secrets.txt in history: git log --all -- secrets.txt\n" +
+                    "3. Run the filter-branch command above\n" +
+                    "4. Delete the working copy: rm secrets.txt (if still exists)\n" +
+                    "5. Verify it's gone: git log --all --full-history -- secrets.txt\n\n" +
+                    "SUCCESS CRITERIA:\n" +
+                    "  • secrets.txt removed from ALL commits in history\n" +
+                    "  • secrets.txt not in working directory\n" +
+                    "  • All other files preserved\n\n" +
+                    "═══════════════════════════════════════════════════════════════\n" +
+                    "                PREVENTION IS BETTER THAN CURE\n" +
+                    "═══════════════════════════════════════════════════════════════\n\n" +
+                    "Avoid this problem entirely:\n" +
+                    "  • Use .gitignore for sensitive file patterns\n" +
+                    "  • Store secrets in environment variables\n" +
+                    "  • Use secret managers (Vault, AWS Secrets Manager, etc.)\n" +
+                    "  • Use pre-commit hooks to scan for secrets\n" +
+                    "  • Always review: git diff --cached before committing\n\n" +
                     "═══════════════════════════════════════════════════════════════\n");
             },
             customValidator: async (workingDir, gitExec) =>
@@ -180,9 +214,10 @@ public class Room22RewriteReliquaryFactory
                     return new ChallengeResult(
                         false,
                         $"The secrets.txt file still appears in {commitCount} commit(s) in the repository history! " +
-                        "You need to use git filter-branch to remove it from ALL commits.",
+                        "You need to rewrite history to remove it from ALL commits.",
                         "Read DANGER_INSTRUCTIONS.txt and use:\n" +
-                        "git filter-branch --force --index-filter 'git rm --cached --ignore-unmatch secrets.txt' --prune-empty --tag-name-filter cat -- --all"
+                        "git filter-branch --force --index-filter 'git rm --cached --ignore-unmatch secrets.txt' --prune-empty --tag-name-filter cat -- --all\n\n" +
+                        "(In the real world, you'd use: git filter-repo --path secrets.txt --invert-paths)"
                     );
                 }
 
@@ -192,7 +227,7 @@ public class Room22RewriteReliquaryFactory
                 {
                     return new ChallengeResult(
                         false,
-                        "README.md has been removed from history! The filter-branch should only remove secrets.txt, not other files.",
+                        "README.md has been removed from history! The filter should only remove secrets.txt, not other files.",
                         "You may have used the wrong filter. Check the command carefully."
                     );
                 }
@@ -204,7 +239,7 @@ public class Room22RewriteReliquaryFactory
                     return new ChallengeResult(
                         false,
                         "No commits found in the repository!",
-                        "Something went wrong with the filter-branch operation."
+                        "Something went wrong with the filter operation."
                     );
                 }
 
@@ -214,20 +249,21 @@ public class Room22RewriteReliquaryFactory
                     return new ChallengeResult(
                         false,
                         $"Only {commitLines.Length} commit(s) found. The repository should have at least 3 commits after removing the secrets commit.",
-                        "The filter-branch may have removed too many commits. Use --prune-empty carefully."
+                        "The filter may have removed too many commits. Use --prune-empty carefully."
                     );
                 }
 
                 // Success!
                 return new ChallengeResult(
                     true,
-                    "INCREDIBLE! You've successfully rewritten history! The secrets.txt file has been completely purged from all commits. " +
-                    "This is one of git's most powerful and dangerous capabilities. You've learned how to remove sensitive data that was " +
-                    "accidentally committed, but remember: this should ONLY be done on local, unshared repositories, or in coordination with " +
-                    "your entire team on shared repositories. In production, you'd want to rotate any exposed credentials immediately, even " +
-                    "after removing them from history (assume they were already compromised). For modern workflows, consider using 'git filter-repo' " +
-                    "or 'BFG Repo-Cleaner' which are faster and safer alternatives to filter-branch. Most importantly: use .gitignore and secret " +
-                    "management tools (like environment variables, secret vaults, or .env files) to prevent secrets from being committed in the first place!",
+                    "INCREDIBLE! You've successfully rewritten history! The secrets.txt file has been completely purged from all commits.\n\n" +
+                    "KEY TAKEAWAYS:\n" +
+                    "• In real projects, use 'git filter-repo' (install via pip/brew) - it's faster, safer, and recommended\n" +
+                    "• 'git filter-branch' is deprecated but useful for understanding the concepts\n" +
+                    "• ALWAYS rotate any exposed credentials immediately - assume they were already compromised\n" +
+                    "• Prevention is best: use .gitignore, environment variables, and secret managers\n" +
+                    "• NEVER rewrite shared history without team coordination\n\n" +
+                    "You've learned one of git's most powerful and dangerous capabilities. Use this knowledge wisely!",
                     null
                 );
             }
@@ -236,75 +272,51 @@ public class Room22RewriteReliquaryFactory
         var room = new Room(
             id: "room-22",
             name: "The Rewrite Reliquary",
-            description: "A forbidden archive where history itself can be rewritten - use with extreme caution",
+            description: "A forbidden archive where history itself can be rewritten - featuring the modern git filter-repo approach",
             narrative: "You enter a dimly lit chamber filled with ancient scrolls and artifacts. At the center stands a mystical altar " +
                       "pulsing with dangerous energy. An ancient keeper appears, their voice grave:\n\n" +
                       "'Welcome to the Rewrite Reliquary, the most dangerous room in this dungeon. Here, you will learn to alter history itself. " +
                       "But heed my warning: this power must be used with EXTREME caution!'\n\n" +
                       "'Sometimes, terrible mistakes happen. Secrets are committed, passwords exposed, massive files bloat the repository. " +
                       "Simply deleting them from the current version isn't enough - they remain in git's history, accessible to anyone who looks.'\n\n" +
-                      "'Git filter-branch allows you to rewrite commits, removing files from history as if they never existed. " +
-                      "But this changes commit hashes - it literally rewrites history!'\n\n" +
+                      "[green]═══ THE MODERN WAY: git filter-repo ═══[/]\n\n" +
+                      "The Git project recommends [cyan]git filter-repo[/] for rewriting history.\n" +
+                      "It's 10-100x faster and much safer than the old filter-branch.\n\n" +
+                      "[yellow]Installation:[/]\n" +
+                      "  macOS:    [cyan]brew install git-filter-repo[/]\n" +
+                      "  Ubuntu:   [cyan]apt install git-filter-repo[/]\n" +
+                      "  pip:      [cyan]pip install git-filter-repo[/]\n\n" +
+                      "[yellow]The filter-repo command:[/]\n" +
+                      "  [cyan]git filter-repo --path secrets.txt --invert-paths[/]\n" +
+                      "  [dim](Add --force if not a fresh clone)[/]\n\n" +
+                      "[dim](Since filter-repo requires separate installation, this game uses\n" +
+                      "filter-branch to simulate the challenge. In real projects, use filter-repo!)[/]\n\n" +
                       "[red]⚠️  CRITICAL WARNINGS:[/]\n" +
                       "  • ONLY rewrite history on local, unshared repositories\n" +
                       "  • NEVER rewrite history that others have based work on\n" +
                       "  • All commit hashes will change - breaking references\n" +
-                      "  • Anyone who pulled before must force-pull or re-clone\n" +
-                      "  • This is a DESTRUCTIVE operation - use with care!\n\n" +
+                      "  • If secrets were pushed, ASSUME THEY'RE COMPROMISED\n\n" +
                       "[yellow]The Challenge:[/]\n" +
                       "  • A secrets.txt file was accidentally committed\n" +
                       "  • Several commits were made AFTER that mistake\n" +
                       "  • Remove secrets.txt from ALL commits in history\n" +
                       "  • Preserve all other files and commits\n\n" +
                       "[yellow]Your Mission:[/]\n" +
-                      "  1. Read DANGER_INSTRUCTIONS.txt thoroughly (this is important!)\n" +
-                      "  2. Examine the repository history: [cyan]git log --oneline[/]\n" +
-                      "  3. Verify secrets.txt exists in history: [cyan]git log --all -- secrets.txt[/]\n" +
-                      "  4. Use filter-branch to remove it from all commits\n" +
-                      "  5. Verify it's gone: [cyan]git log --all --full-history -- secrets.txt[/]\n\n" +
-                      "[yellow]═══ Command Guide ═══[/]\n" +
-                      "[cyan]git filter-branch[/] - Rewrite branches and history\n" +
-                      "  • Applies filters to each commit\n" +
-                      "  • Changes commit hashes\n" +
-                      "  • DANGEROUS - rewrites history\n\n" +
-                      "[cyan]git filter-branch --index-filter 'CMD' --all[/]\n" +
-                      "  • Runs CMD on the index of each commit\n" +
-                      "  • --all applies to all branches\n\n" +
-                      "[cyan]git rm --cached --ignore-unmatch <file>[/]\n" +
-                      "  • Remove file from index (staging)\n" +
-                      "  • --cached: only remove from index, not working tree\n" +
-                      "  • --ignore-unmatch: don't fail if file doesn't exist\n\n" +
-                      "Full command to remove secrets.txt:\n" +
+                      "  1. Read [cyan]DANGER_INSTRUCTIONS.txt[/] thoroughly!\n" +
+                      "  2. Examine history: [cyan]git log --oneline[/]\n" +
+                      "  3. Verify secrets in history: [cyan]git log --all -- secrets.txt[/]\n" +
+                      "  4. Rewrite history using the filter-branch command from the instructions\n" +
+                      "  5. Delete working copy: [cyan]rm secrets.txt[/]\n" +
+                      "  6. Verify it's gone: [cyan]git log --all --full-history -- secrets.txt[/]\n\n" +
+                      "[yellow]═══ For This Game (filter-branch) ═══[/]\n" +
                       "[cyan]git filter-branch --force --index-filter \\\n" +
                       "  'git rm --cached --ignore-unmatch secrets.txt' \\\n" +
                       "  --prune-empty --tag-name-filter cat -- --all[/]\n\n" +
-                      "[cyan]git log --all --full-history -- <file>[/]\n" +
-                      "  • Show all commits that touched a file\n" +
-                      "  • --all: search all branches\n" +
-                      "  • --full-history: don't simplify history\n" +
-                      "  • Returns empty if file never existed\n\n" +
-                      "[green]Alternative Tools (Modern Recommended):[/]\n" +
-                      "  • git filter-repo (faster, safer, more features)\n" +
-                      "    - Not in core git, requires installation\n" +
-                      "    - pip install git-filter-repo\n" +
-                      "    - Usage: git filter-repo --path secrets.txt --invert-paths\n\n" +
-                      "  • BFG Repo-Cleaner (simple, fast)\n" +
-                      "    - Java-based tool\n" +
-                      "    - Usage: bfg --delete-files secrets.txt\n\n" +
-                      "[green]When to Use History Rewriting:[/]\n" +
-                      "  ✓ Remove accidentally committed secrets/credentials\n" +
-                      "  ✓ Remove large binary files bloating repository\n" +
-                      "  ✓ Split monorepo into separate repositories\n" +
-                      "  ✓ Change commit author information\n" +
-                      "  ✗ NEVER on shared history without team coordination\n\n" +
-                      "[green]Prevention is Better than Cure:[/]\n" +
-                      "  • Use .gitignore to exclude sensitive files\n" +
-                      "  • Use environment variables for secrets\n" +
-                      "  • Use secret management tools (Vault, AWS Secrets Manager)\n" +
+                      "[green]═══ Prevention Tips ═══[/]\n" +
+                      "  • Use .gitignore for sensitive file patterns\n" +
+                      "  • Store secrets in environment variables\n" +
                       "  • Use pre-commit hooks to scan for secrets\n" +
-                      "  • Review changes before committing (git diff --cached)\n\n" +
-                      "[red]Remember:[/] If secrets were pushed to a remote, assume they're compromised!\n" +
-                      "Rotate credentials immediately, even after removing from history.\n\n" +
+                      "  • Always review: [cyan]git diff --cached[/] before committing\n\n" +
                       "[dim]With great power comes great responsibility. Rewrite history wisely![/]",
             challenge: challenge,
             exits: new Dictionary<string, string> { { "forward", "room-23" } },
