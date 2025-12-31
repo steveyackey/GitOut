@@ -18,6 +18,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PublishAot>true</PublishAot>
+    <AssemblyName>gitout</AssemblyName>
   </PropertyGroup>
 
 </Project>

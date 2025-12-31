@@ -26,7 +26,6 @@ jobs:
             -c Release `
             -r win-x64 `
             --self-contained `
-            -p:AssemblyName=gitout `
             -o publish/win-x64
 
       - name: Upload artifact
@@ -52,7 +51,6 @@ jobs:
             -c Release \
             -r linux-x64 \
             --self-contained \
-            -p:AssemblyName=gitout \
             -o publish/linux-x64
 
       - name: Upload artifact
@@ -78,7 +76,6 @@ jobs:
             -c Release \
             -r linux-arm64 \
             --self-contained \
-            -p:AssemblyName=gitout \
             -o publish/linux-arm64
 
       - name: Upload artifact
@@ -104,7 +101,6 @@ jobs:
             -c Release \
             -r osx-arm64 \
             --self-contained \
-            -p:AssemblyName=gitout \
             -o publish/osx-arm64
 
       - name: Ad-hoc sign macOS binary
