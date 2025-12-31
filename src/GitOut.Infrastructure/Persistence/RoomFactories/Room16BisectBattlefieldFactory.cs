@@ -125,9 +125,9 @@ public class Room16BisectBattlefieldFactory
                       "\n\n[green]Pro tip:[/] Bisect is most powerful when you have good automated tests!" +
                       "\n\n[dim]Think of bisect as binary search through git history![/]",
             challenge: challenge,
-            exits: new Dictionary<string, string>(),
+            exits: new Dictionary<string, string> { { "forward", "room-17" } },
             isStartRoom: false,
-            isEndRoom: true
+            isEndRoom: false
         );
 
         return Task.FromResult(room);

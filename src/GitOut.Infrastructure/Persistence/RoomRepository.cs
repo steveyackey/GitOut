@@ -44,6 +44,13 @@ public class RoomRepository : IRoomRepository
         var room14Factory = new Room14ReflogRuinsFactory(_gitExecutor);
         var room15Factory = new Room15RemoteRealmFactory(_gitExecutor);
         var room16Factory = new Room16BisectBattlefieldFactory(_gitExecutor);
+        var room17Factory = new Room17WorktreeWorkshopFactory(_gitExecutor);
+        var room18Factory = new Room18BlameChamberFactory(_gitExecutor);
+        var room19Factory = new Room19HookHollowFactory(_gitExecutor);
+        var room20Factory = new Room20InteractiveStagingHallFactory(_gitExecutor);
+        var room21Factory = new Room21SubmoduleSanctumFactory(_gitExecutor);
+        var room22Factory = new Room22RewriteReliquaryFactory(_gitExecutor);
+        var room23Factory = new Room23FinalGauntletFactory(_gitExecutor);
 
         // Create rooms from factories
         _cachedRooms["room-1"] = await room01Factory.CreateAsync();
@@ -62,6 +69,13 @@ public class RoomRepository : IRoomRepository
         _cachedRooms["room-14"] = await room14Factory.CreateAsync();
         _cachedRooms["room-15"] = await room15Factory.CreateAsync();
         _cachedRooms["room-16"] = await room16Factory.CreateAsync();
+        _cachedRooms["room-17"] = await room17Factory.CreateAsync();
+        _cachedRooms["room-18"] = await room18Factory.CreateAsync();
+        _cachedRooms["room-19"] = await room19Factory.CreateAsync();
+        _cachedRooms["room-20"] = await room20Factory.CreateAsync();
+        _cachedRooms["room-21"] = await room21Factory.CreateAsync();
+        _cachedRooms["room-22"] = await room22Factory.CreateAsync();
+        _cachedRooms["room-23"] = await room23Factory.CreateAsync();
 
         return _cachedRooms;
     }

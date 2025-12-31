@@ -427,7 +427,9 @@ public class Phase3RoomsTests : RoomIntegrationTestFixture
         var room = await RoomHelper.LoadRoomAsync("room-16");
 
         room.Name.Should().Be("The Bisect Battlefield");
-        RoomHelper.VerifyEndRoom(room);
+        // Room 16 is no longer an end room in Phase 4 - it connects to room-17
+        room.IsEndRoom.Should().BeFalse();
+        room.Exits.Should().ContainKey("forward").WhoseValue.Should().Be("room-17");
 
         // Act - Setup creates commits with a bug
         await RoomHelper.SetupChallengeAsync(room, workingDirectory);
@@ -470,7 +472,15 @@ public class Phase3RoomsTests : RoomIntegrationTestFixture
         RoomHelper.VerifyExit(rooms["room-8"], "forward", "room-9");
 
         // Verify Phase 3 room chain (9-16)
-        await RoomHelper.VerifyRoomChainAsync(9, 10, 11, 12, 13, 14, 15, 16);
+        // Note: Room 16 now connects to room-17 (Phase 4), so it's no longer an end room
+        RoomHelper.VerifyExit(rooms["room-9"], "forward", "room-10");
+        RoomHelper.VerifyExit(rooms["room-10"], "forward", "room-11");
+        RoomHelper.VerifyExit(rooms["room-11"], "forward", "room-12");
+        RoomHelper.VerifyExit(rooms["room-12"], "forward", "room-13");
+        RoomHelper.VerifyExit(rooms["room-13"], "forward", "room-14");
+        RoomHelper.VerifyExit(rooms["room-14"], "forward", "room-15");
+        RoomHelper.VerifyExit(rooms["room-15"], "forward", "room-16");
+        RoomHelper.VerifyExit(rooms["room-16"], "forward", "room-17");
     }
 
     [Fact]

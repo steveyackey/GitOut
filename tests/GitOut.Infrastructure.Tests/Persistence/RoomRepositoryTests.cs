@@ -17,8 +17,8 @@ public class RoomRepositoryTests
         // Act
         var rooms = await repository.LoadRoomsAsync();
 
-        // Assert - Phase 2 (8 rooms) + Phase 3 (8 rooms) = 16 total
-        rooms.Should().HaveCount(16);
+        // Assert - Phase 2 (8 rooms) + Phase 3 (8 rooms) + Phase 4 (7 rooms: 17, 18, 19, 20, 21, 22, 23) = 23 total
+        rooms.Should().HaveCount(23);
         rooms.Should().ContainKey("room-1");
         rooms.Should().ContainKey("room-2");
         rooms.Should().ContainKey("room-3");
@@ -35,6 +35,13 @@ public class RoomRepositoryTests
         rooms.Should().ContainKey("room-14");
         rooms.Should().ContainKey("room-15");
         rooms.Should().ContainKey("room-16");
+        rooms.Should().ContainKey("room-17");
+        rooms.Should().ContainKey("room-18");
+        rooms.Should().ContainKey("room-19");
+        rooms.Should().ContainKey("room-20");
+        rooms.Should().ContainKey("room-21");
+        rooms.Should().ContainKey("room-22");
+        rooms.Should().ContainKey("room-23");
     }
 
     [Fact]
@@ -166,7 +173,7 @@ public class RoomRepositoryTests
     }
 
     [Fact]
-    public async Task Room16_ShouldBeEndRoom()
+    public async Task Room16_ShouldNotBeEndRoom()
     {
         // Arrange
         var gitExecutor = new GitCommandExecutor();
@@ -177,9 +184,9 @@ public class RoomRepositoryTests
 
         // Assert
         room.Should().NotBeNull();
-        room!.IsEndRoom.Should().BeTrue();
+        room!.IsEndRoom.Should().BeFalse("Room 16 is no longer the end room in Phase 4");
         room.Name.Should().Be("The Bisect Battlefield");
-        room.Exits.Should().BeEmpty("End room should have no exits");
+        room.Exits.Should().ContainKey("forward").WhoseValue.Should().Be("room-17");
     }
 
     [Fact]

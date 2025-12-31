@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 GitOut is a terminal-based dungeon crawler that teaches git commands through gameplay. Players navigate rooms, encounter challenges, and use **real git commands** to progress. The project is built with .NET 10, C# 14, and Spectre.Console for TUI, following clean architecture principles.
 
-**Current Status**: Phase 3 complete (16 playable rooms, all 3 challenge types, save/load system, factory-based room architecture). Covers basic through advanced git concepts including init, add, commit, log, status, branch, merge, restore, conflict resolution, stash, cherry-pick, rebase, tag, reflog, remote repos, and bisect.
+**Current Status**: Phase 4 complete (23 playable rooms, all 3 challenge types, save/load system fully integrated, factory-based room architecture). Covers basic through expert git concepts including init, add, commit, log, status, branch, merge, restore, conflict resolution, stash, cherry-pick, rebase, tag, reflog, remote repos, bisect, worktree, blame, hooks, interactive staging, submodule, filter-branch, and a comprehensive final boss challenge.
 
 ## Essential Commands
 
@@ -107,8 +107,8 @@ await GetLogAsync(workingDirectory, maxCount)  // Gets oneline log, handles empt
 - Uses System.Text.Json with camelCase naming
 
 **Room repository (`Persistence/RoomRepository.cs` + `Persistence/RoomFactories/`):**
-- RoomRepository.cs (~81 lines) - Lightweight coordinator that instantiates factory classes
-- 16 individual factory files in RoomFactories/ folder - Each factory creates one room
+- RoomRepository.cs (~95 lines) - Lightweight coordinator that instantiates factory classes
+- 23 individual factory files in RoomFactories/ folder - Each factory creates one room
 - Factory pattern: Each RoomXXFactory has a CreateAsync() method that returns a fully-configured Room
 - Wires up IGitCommandExecutor to each challenge via factory constructors
 - Returns Dictionary<string, Room> for game navigation
@@ -315,7 +315,7 @@ public async Task CompleteGame_ShouldProgressThroughFirstTwoRooms()
 - Domain: 95%+ (pure logic, highly testable)
 - Application: 90%+
 - Infrastructure: 80%+ (some OS/git dependencies)
-- Overall: 85%+ (currently achieved)
+- Overall: 85%+ (currently achieved with 184 tests: 61 Domain + 123 Infrastructure)
 
 ## Save/Load System
 
@@ -371,7 +371,7 @@ public async Task CompleteGame_ShouldProgressThroughFirstTwoRooms()
 
 - **Domain/Application tests**: Use Moq to mock interfaces, never import Infrastructure
 - **Infrastructure tests**: Can import everything, use real file system and git
-- **Console tests**: Not implemented yet (Phase 4) - will use Spectre.Console.Testing
+- **Console tests**: Not implemented yet (Phase 5) - will use Spectre.Console.Testing
 
 ## Key Design Patterns
 
@@ -397,6 +397,17 @@ public async Task CompleteGame_ShouldProgressThroughFirstTwoRooms()
 - Intermediate branching: stash (Room 10), cherry-pick (Room 11), rebase (Room 12)
 - Advanced commands: tag (Room 13), reflog (Room 14), remote (Room 15), bisect (Room 16)
 - Factory pattern refactoring for better maintainability
+- 159 tests passing
+
+### Phase 4 (Complete)
+- 23 rooms total (7 new rooms added)
+- Advanced git workflows: worktree (Room 17), blame (Room 18), hooks (Room 19)
+- Advanced techniques: interactive staging (Room 20), submodule (Room 21), filter-branch (Room 22)
+- Epic final boss challenge (Room 23) - combining all git concepts learned
+- Save/load system fully integrated and tested
+- Cross-platform compatibility (Windows/Unix/Mac)
+- 184 tests passing (61 Domain + 123 Infrastructure)
+- 31 new Phase 4 integration tests
 
 ### Future Considerations
 
@@ -446,9 +457,11 @@ When extending validation:
 - `src/GitOut.Infrastructure/Git/GitCommandExecutor.cs` - Git execution
 - `src/GitOut.Application/Services/GameEngine.cs` - Command routing
 - `src/GitOut.Console/Program.cs` - DI setup and game loop
-- `src/GitOut.Infrastructure/Persistence/RoomRepository.cs` - Room loading coordinator (~81 lines)
+- `src/GitOut.Infrastructure/Persistence/RoomRepository.cs` - Room loading coordinator (~95 lines)
 - `src/GitOut.Infrastructure/Persistence/RoomFactories/Room01InitializationChamberFactory.cs` - Example factory pattern
+- `src/GitOut.Infrastructure/Persistence/RoomFactories/Room23FinalGauntletFactory.cs` - Epic boss challenge example
 - `tests/GitOut.Infrastructure.Tests/Integration/EndToEndGameTests.cs` - E2E examples
+- `tests/GitOut.Infrastructure.Tests/Integration/Phase4RoomsTests.cs` - Phase 4 room tests
 
 ## Room Factory Architecture
 
@@ -456,7 +469,7 @@ When extending validation:
 
 ```
 src/GitOut.Infrastructure/Persistence/
-├── RoomRepository.cs                                    # 81 lines - coordinator
+├── RoomRepository.cs                                    # ~95 lines - coordinator
 └── RoomFactories/
     ├── Room01InitializationChamberFactory.cs           # git init
     ├── Room02StagingAreaFactory.cs                     # git add/commit
@@ -473,7 +486,14 @@ src/GitOut.Infrastructure/Persistence/
     ├── Room13TagTowerFactory.cs                        # git tag
     ├── Room14ReflogRuinsFactory.cs                     # git reflog
     ├── Room15RemoteRealmFactory.cs                     # remote repos
-    └── Room16BisectBattlefieldFactory.cs               # git bisect
+    ├── Room16BisectBattlefieldFactory.cs               # git bisect
+    ├── Room17WorktreeWorkshopFactory.cs                # git worktree
+    ├── Room18BlameChamberFactory.cs                    # git blame
+    ├── Room19HookHollowFactory.cs                      # git hooks
+    ├── Room20InteractiveStagingHallFactory.cs          # git add -p
+    ├── Room21SubmoduleSanctumFactory.cs                # git submodule
+    ├── Room22RewriteReliquaryFactory.cs                # git filter-branch
+    └── Room23FinalGauntletFactory.cs                   # FINAL BOSS CHALLENGE
 ```
 
 ### Factory Pattern Example
@@ -531,12 +551,12 @@ public async Task<Dictionary<string, Room>> LoadRoomsAsync()
     // Instantiate all factories
     var room01Factory = new Room01InitializationChamberFactory(_gitExecutor);
     var room02Factory = new Room02StagingAreaFactory(_gitExecutor);
-    // ... 14 more factories
+    // ... 21 more factories
 
     // Create rooms from factories
     _cachedRooms["room-1"] = await room01Factory.CreateAsync();
     _cachedRooms["room-2"] = await room02Factory.CreateAsync();
-    // ... 14 more rooms
+    // ... 21 more rooms
 
     return _cachedRooms;
 }
@@ -552,9 +572,10 @@ public async Task<Dictionary<string, Room>> LoadRoomsAsync()
 - Merge conflicts when adding rooms in parallel
 
 **After (Factory Pattern):**
-- RoomRepository.cs reduced to 81 lines
-- Each room in its own file (~40-100 lines)
+- RoomRepository.cs reduced to ~95 lines (from 1,459)
+- Each room in its own file (~40-550 lines, most 40-120)
 - Easy to locate: "Room05BranchJunctionFactory.cs"
 - Clean git diffs focused on one room
 - No merge conflicts - different files
 - Better IDE navigation and searchability
+- Room 23 (Final Boss) is largest at ~550 lines due to complex multi-step validation
