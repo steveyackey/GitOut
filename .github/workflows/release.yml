@@ -1,0 +1,269 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+env:
+  DOTNET_VERSION: '10.0.x'
+
+jobs:
+  build-windows:
+    name: Build Windows Binaries
+    runs-on: windows-latest
+    
+    strategy:
+      matrix:
+        rid: [win-x64, win-arm64]
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+        
+    - name: Publish ${{ matrix.rid }}
+      run: |
+        dotnet publish src/GitOut.Console/GitOut.Console.csproj `
+          -c Release `
+          -r ${{ matrix.rid }} `
+          --self-contained true `
+          -p:PublishAot=true `
+          -p:StripSymbols=true `
+          -o artifacts/publish/${{ matrix.rid }}
+        
+    - name: Create archive
+      run: |
+        $version = "${{ github.ref_name }}".TrimStart('v')
+        $archiveName = "gitout-$version-${{ matrix.rid }}.zip"
+        
+        # Create minimal README for the archive
+        @"
+        GitOut - A Dungeon Crawler That Teaches Git
+        
+        Version: $version
+        Platform: ${{ matrix.rid }}
+        
+        To run: gitout.exe
+        
+        For more information, visit:
+        https://github.com/steveyackey/GitOut
+        "@ | Out-File -FilePath artifacts/publish/${{ matrix.rid }}/README.txt -Encoding UTF8
+        
+        # Copy license
+        Copy-Item LICENSE artifacts/publish/${{ matrix.rid }}/
+        
+        # Create zip archive
+        Compress-Archive -Path artifacts/publish/${{ matrix.rid }}/* -DestinationPath artifacts/$archiveName
+        
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ matrix.rid }}
+        path: artifacts/gitout-*.zip
+        retention-days: 1
+
+  build-linux:
+    name: Build Linux Binaries
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        rid: [linux-x64, linux-arm64]
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+        
+    - name: Publish ${{ matrix.rid }}
+      run: |
+        dotnet publish src/GitOut.Console/GitOut.Console.csproj \
+          -c Release \
+          -r ${{ matrix.rid }} \
+          --self-contained true \
+          -p:PublishAot=true \
+          -p:StripSymbols=true \
+          -o artifacts/publish/${{ matrix.rid }}
+        
+    - name: Create archive
+      run: |
+        version="${{ github.ref_name }}"
+        version="${version#v}"
+        archive_name="gitout-${version}-${{ matrix.rid }}.tar.gz"
+        
+        cd artifacts/publish/${{ matrix.rid }}
+        
+        # Create minimal README for the archive
+        cat > README.txt << 'EOF'
+        GitOut - A Dungeon Crawler That Teaches Git
+        
+        Version: $version
+        Platform: ${{ matrix.rid }}
+        
+        To run: ./gitout
+        
+        For more information, visit:
+        https://github.com/steveyackey/GitOut
+        EOF
+        
+        # Copy license
+        cp ../../../LICENSE .
+        
+        # Create tarball
+        tar -czf ../../${archive_name} gitout README.txt LICENSE
+        
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ matrix.rid }}
+        path: artifacts/gitout-*.tar.gz
+        retention-days: 1
+
+  build-macos:
+    name: Build macOS Binaries
+    runs-on: macos-latest
+    
+    strategy:
+      matrix:
+        rid: [osx-x64, osx-arm64]
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+        
+    - name: Publish ${{ matrix.rid }}
+      run: |
+        dotnet publish src/GitOut.Console/GitOut.Console.csproj \
+          -c Release \
+          -r ${{ matrix.rid }} \
+          --self-contained true \
+          -p:PublishAot=true \
+          -p:StripSymbols=true \
+          -o artifacts/publish/${{ matrix.rid }}
+        
+    - name: Create archive
+      run: |
+        version="${{ github.ref_name }}"
+        version="${version#v}"
+        archive_name="gitout-${version}-${{ matrix.rid }}.tar.gz"
+        
+        cd artifacts/publish/${{ matrix.rid }}
+        
+        # Create minimal README for the archive
+        cat > README.txt << 'EOF'
+        GitOut - A Dungeon Crawler That Teaches Git
+        
+        Version: $version
+        Platform: ${{ matrix.rid }}
+        
+        To run: ./gitout
+        
+        For more information, visit:
+        https://github.com/steveyackey/GitOut
+        EOF
+        
+        # Copy license
+        cp ../../../LICENSE .
+        
+        # Create tarball
+        tar -czf ../../${archive_name} gitout README.txt LICENSE
+        
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ matrix.rid }}
+        path: artifacts/gitout-*.tar.gz
+        retention-days: 1
+
+  create-release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    needs: [build-windows, build-linux, build-macos]
+    permissions:
+      contents: write
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Download all artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: artifacts
+        
+    - name: Display structure of downloaded files
+      run: ls -R artifacts
+      
+    - name: Create Release
+      uses: softprops/action-gh-release@v2
+      with:
+        draft: false
+        prerelease: false
+        generate_release_notes: true
+        files: |
+          artifacts/**/*
+
+  build-docker:
+    name: Build and Push Docker Image
+    runs-on: ubuntu-latest
+    needs: [build-windows, build-linux, build-macos]
+    permissions:
+      contents: read
+      packages: write
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+      
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+      
+    - name: Log in to GitHub Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Extract version from tag
+      id: version
+      run: |
+        version="${{ github.ref_name }}"
+        version="${version#v}"
+        echo "version=${version}" >> $GITHUB_OUTPUT
+        
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        platforms: linux/amd64,linux/arm64
+        push: true
+        tags: |
+          ghcr.io/${{ github.repository_owner }}/gitout:latest
+          ghcr.io/${{ github.repository_owner }}/gitout:${{ steps.version.outputs.version }}
+        labels: |
+          org.opencontainers.image.title=GitOut
+          org.opencontainers.image.description=A terminal-based dungeon crawler that teaches git commands
+          org.opencontainers.image.url=https://github.com/${{ github.repository }}
+          org.opencontainers.image.source=https://github.com/${{ github.repository }}
+          org.opencontainers.image.version=${{ steps.version.outputs.version }}
+          org.opencontainers.image.created=${{ github.event.repository.updated_at }}
+          org.opencontainers.image.revision=${{ github.sha }}
+          org.opencontainers.image.licenses=MIT
