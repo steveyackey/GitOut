@@ -1,0 +1,44 @@
+# .dockerignore for GitOut
+
+# Build artifacts
+**/bin/
+**/obj/
+artifacts/
+
+# IDE files
+.vs/
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Test results
+TestResults/
+*.trx
+*.coverage
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git files
+.git/
+.gitignore
+.gitattributes
+
+# Documentation (not needed in image)
+*.md
+!src/**/*.md
+
+# Plans and extra docs
+plans/
+.claude/
+
+# Scripts (build scripts not needed in container)
+eng/
+
+# Temporary files
+**/tmp/
+**/.tmp/
