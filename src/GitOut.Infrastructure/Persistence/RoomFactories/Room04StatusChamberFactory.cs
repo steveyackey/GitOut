@@ -24,6 +24,8 @@ public class Room04StatusChamberFactory
             {
                 // Initialize repo with initial commit
                 await gitExec.ExecuteAsync("init", workingDir);
+                await gitExec.ExecuteAsync("config user.email \"adventurer@gitout.game\"", workingDir);
+                await gitExec.ExecuteAsync("config user.name \"Adventurer\"", workingDir);
                 await File.WriteAllTextAsync(Path.Combine(workingDir, "tracked.txt"), "I am tracked");
                 await gitExec.ExecuteAsync("add tracked.txt", workingDir);
                 await gitExec.ExecuteAsync("commit -m \"Initial commit\"", workingDir);

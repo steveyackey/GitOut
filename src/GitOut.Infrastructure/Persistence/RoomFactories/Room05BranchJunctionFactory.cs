@@ -24,6 +24,8 @@ public class Room05BranchJunctionFactory
             {
                 // Initialize repo with initial commit
                 await gitExec.ExecuteAsync("init", workingDir);
+                await gitExec.ExecuteAsync("config user.email \"adventurer@gitout.game\"", workingDir);
+                await gitExec.ExecuteAsync("config user.name \"Adventurer\"", workingDir);
                 await File.WriteAllTextAsync(Path.Combine(workingDir, "main.txt"), "Main branch file");
                 await gitExec.ExecuteAsync("add main.txt", workingDir);
                 await gitExec.ExecuteAsync("commit -m \"Initial commit on main\"", workingDir);

@@ -214,7 +214,13 @@ try
 catch (Exception ex)
 {
     renderer.RenderError($"An unexpected error occurred: {ex.Message}");
-    AnsiConsole.WriteException(ex);
+    // AOT-safe exception display (WriteException uses reflection)
+    AnsiConsole.MarkupLine($"[red]{ex.GetType().Name}:[/] {Markup.Escape(ex.Message)}");
+    if (ex.StackTrace is not null)
+    {
+        AnsiConsole.MarkupLine("[dim]Stack trace:[/]");
+        AnsiConsole.WriteLine(ex.StackTrace);
+    }
 }
 finally
 {

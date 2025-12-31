@@ -24,6 +24,8 @@ public class Room03HistoryArchiveFactory
             {
                 // Initialize repo and create 3-5 commits
                 await gitExec.ExecuteAsync("init", workingDir);
+                await gitExec.ExecuteAsync("config user.email \"adventurer@gitout.game\"", workingDir);
+                await gitExec.ExecuteAsync("config user.name \"Adventurer\"", workingDir);
 
                 // Create first commit
                 await File.WriteAllTextAsync(Path.Combine(workingDir, "scroll1.txt"), "The First Chronicle");

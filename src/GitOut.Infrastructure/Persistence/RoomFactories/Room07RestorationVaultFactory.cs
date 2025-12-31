@@ -24,6 +24,8 @@ public class Room07RestorationVaultFactory
             {
                 // Initialize repo
                 await gitExec.ExecuteAsync("init", workingDir);
+                await gitExec.ExecuteAsync("config user.email \"adventurer@gitout.game\"", workingDir);
+                await gitExec.ExecuteAsync("config user.name \"Adventurer\"", workingDir);
 
                 // Create and commit the sacred text
                 var originalContent = "Sacred Text: In the beginning, there was git init...";
