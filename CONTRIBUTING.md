@@ -13,7 +13,7 @@ Thank you for your interest in contributing to GitOut!
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/gitout.git
+git clone https://github.com/steveyackey/gitout.git
 cd gitout
 
 # Build the solution
