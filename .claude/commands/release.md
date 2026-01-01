@@ -27,8 +27,8 @@ If this is the first release (v0.0.0), use: `git log --oneline`
 Parse each commit message to determine the version bump:
 
 **MAJOR bump** (breaking change) if ANY commit:
-- Contains `BREAKING CHANGE:` in the body/footer
-- Has `!` after the type (e.g., `feat!:`, `fix!:`, `refactor!:`)
+- Contains "BREAKING CHANGE:" in the body/footer
+- Has "!" after the type (e.g., "feat!:", "fix!:", "refactor!:")
 
 **MINOR bump** (new feature) if ANY commit:
 - Starts with `feat:` or `feat(scope):`
