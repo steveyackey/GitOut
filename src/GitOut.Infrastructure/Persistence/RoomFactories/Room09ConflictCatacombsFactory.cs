@@ -33,6 +33,9 @@ public class Room09ConflictCatacombsFactory
                 await gitExec.ExecuteAsync("add spell-book.txt", workingDir);
                 await gitExec.ExecuteAsync("commit -m \"Initial spell book\"", workingDir);
 
+                // Rename default branch to main (for CI compatibility where default might be master)
+                await gitExec.ExecuteAsync("branch -M main", workingDir);
+
                 // Create branch and modify file
                 await gitExec.ExecuteAsync("checkout -b arcane-updates", workingDir);
                 await File.WriteAllTextAsync(Path.Combine(workingDir, "spell-book.txt"),

@@ -34,6 +34,9 @@ public class Room06MergeNexusFactory
                 await gitExec.ExecuteAsync("add grimoire.txt", workingDir);
                 await gitExec.ExecuteAsync("commit -m \"Initialize grimoire\"", workingDir);
 
+                // Rename default branch to main (for CI compatibility where default might be master)
+                await gitExec.ExecuteAsync("branch -M main", workingDir);
+
                 // Create and switch to my-feature branch
                 await gitExec.ExecuteAsync("checkout -b my-feature", workingDir);
 

@@ -32,6 +32,9 @@ public class Room12RebaseRidgeFactory
                 await gitExec.ExecuteAsync("add timeline.txt", workingDir);
                 await gitExec.ExecuteAsync("commit -m \"Event 1\"", workingDir);
 
+                // Rename default branch to main (for CI compatibility where default might be master)
+                await gitExec.ExecuteAsync("branch -M main", workingDir);
+
                 // Create feature branch
                 await gitExec.ExecuteAsync("checkout -b feature-timeline", workingDir);
                 await File.WriteAllTextAsync(Path.Combine(workingDir, "timeline.txt"), "Event 1: Beginning\nEvent 2: Feature work");

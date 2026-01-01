@@ -33,6 +33,9 @@ public class Room23FinalGauntletFactory
                 await gitExec.ExecuteAsync("add README.md", workingDir);
                 await gitExec.ExecuteAsync("commit -m \"Initial commit\"", workingDir);
 
+                // Rename default branch to main (for CI compatibility where default might be master)
+                await gitExec.ExecuteAsync("branch -M main", workingDir);
+
                 await File.WriteAllTextAsync(Path.Combine(workingDir, "core.js"),
                     "// Core functionality\nfunction initialize() { return 'System initialized'; }");
                 await gitExec.ExecuteAsync("add core.js", workingDir);

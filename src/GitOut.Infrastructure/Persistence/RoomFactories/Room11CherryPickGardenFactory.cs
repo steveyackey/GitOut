@@ -33,6 +33,9 @@ public class Room11CherryPickGardenFactory
                 await gitExec.ExecuteAsync("add garden.txt", workingDir);
                 await gitExec.ExecuteAsync("commit -m \"Initial garden\"", workingDir);
 
+                // Rename default branch to main (for CI compatibility where default might be master)
+                await gitExec.ExecuteAsync("branch -M main", workingDir);
+
                 // Create feature branch with multiple commits
                 await gitExec.ExecuteAsync("checkout -b experimental-flowers", workingDir);
 
