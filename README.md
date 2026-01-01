@@ -8,19 +8,19 @@ A dungeon crawler game that teaches git through real command-line experience.
 
 ```bash
 # macOS (Apple Silicon)
-curl -L https://github.com/YOUR_USERNAME/gitout/releases/latest/download/gitout-macos-arm64.tar.gz | tar xz
+curl -L https://github.com/steveyackey/gitout/releases/latest/download/gitout-macos-arm64.tar.gz | tar xz
 ./gitout
 
 # Linux x64
-curl -L https://github.com/YOUR_USERNAME/gitout/releases/latest/download/gitout-linux-x64.tar.gz | tar xz
+curl -L https://github.com/steveyackey/gitout/releases/latest/download/gitout-linux-x64.tar.gz | tar xz
 ./gitout
 
 # Linux ARM64
-curl -L https://github.com/YOUR_USERNAME/gitout/releases/latest/download/gitout-linux-arm64.tar.gz | tar xz
+curl -L https://github.com/steveyackey/gitout/releases/latest/download/gitout-linux-arm64.tar.gz | tar xz
 ./gitout
 
 # Windows (PowerShell)
-Invoke-WebRequest -Uri https://github.com/YOUR_USERNAME/gitout/releases/latest/download/gitout-win-x64.zip -OutFile gitout.zip
+Invoke-WebRequest -Uri https://github.com/steveyackey/gitout/releases/latest/download/gitout-win-x64.zip -OutFile gitout.zip
 Expand-Archive gitout.zip -DestinationPath .
 .\GitOut.Console.exe
 ```
@@ -28,13 +28,13 @@ Expand-Archive gitout.zip -DestinationPath .
 ### Docker
 
 ```bash
-docker run -it ghcr.io/YOUR_USERNAME/gitout
+docker run -it ghcr.io/steveyackey/gitout
 ```
 
 ### From Source
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/gitout.git
+git clone https://github.com/steveyackey/gitout.git
 cd gitout
 dotnet run --project src/GitOut.Console
 ```
