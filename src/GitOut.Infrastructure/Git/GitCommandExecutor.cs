@@ -37,6 +37,10 @@ public class GitCommandExecutor : IGitCommandExecutor
             CreateNoWindow = true
         };
 
+        // Prevent git from trying to open an editor (important for rebase, merge, etc. on CI)
+        startInfo.Environment["GIT_EDITOR"] = "true";
+        startInfo.Environment["GIT_SEQUENCE_EDITOR"] = "true";
+
         var outputBuilder = new StringBuilder();
         var errorBuilder = new StringBuilder();
 

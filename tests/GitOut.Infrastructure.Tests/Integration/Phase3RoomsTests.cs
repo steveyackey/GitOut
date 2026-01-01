@@ -258,22 +258,14 @@ public class Phase3RoomsTests : RoomIntegrationTestFixture
             var hasConflicts = await GitExecutor.HasConflictsAsync(workingDirectory);
             if (hasConflicts)
             {
-                // Resolve by keeping the feature version
+                // Resolve by writing the expected combined version
                 var timelinePath = Path.Combine(workingDirectory, "timeline.txt");
-                var content = await File.ReadAllTextAsync(timelinePath);
-
-                // Remove conflict markers and keep both changes
-                content = content.Replace("<<<<<<< HEAD", "")
-                                 .Replace("=======", "")
-                                 .Replace(">>>>>>> main", "")
-                                 .Trim();
-
-                // Or just write the expected combined version
                 await File.WriteAllTextAsync(timelinePath,
                     "Event 1: Beginning\nEvent A: Main progress\nEvent B: More main work\nEvent 2: Feature work");
 
                 await GitExecutor.ExecuteAsync("add timeline.txt", workingDirectory);
-                await GitExecutor.ExecuteAsync("rebase --continue", workingDirectory);
+                var continueResult = await GitExecutor.ExecuteAsync("rebase --continue", workingDirectory);
+                continueResult.Success.Should().BeTrue($"rebase --continue should succeed. Error: {continueResult.Error}");
             }
         }
 
