@@ -256,14 +256,10 @@ public class Room22RewriteReliquaryFactory
                 // Success!
                 return new ChallengeResult(
                     true,
-                    "INCREDIBLE! You've successfully rewritten history! The secrets.txt file has been completely purged from all commits.\n\n" +
-                    "KEY TAKEAWAYS:\n" +
-                    "• In real projects, use 'git filter-repo' (install via pip/brew) - it's faster, safer, and recommended\n" +
-                    "• 'git filter-branch' is deprecated but useful for understanding the concepts\n" +
-                    "• ALWAYS rotate any exposed credentials immediately - assume they were already compromised\n" +
-                    "• Prevention is best: use .gitignore, environment variables, and secret managers\n" +
-                    "• NEVER rewrite shared history without team coordination\n\n" +
-                    "You've learned one of git's most powerful and dangerous capabilities. Use this knowledge wisely!",
+                    "INCREDIBLE! You've successfully rewritten history! The secrets.txt file has been completely purged from all commits. " +
+                    "In real projects, always use 'git filter-repo' (install via pip/brew) as it's faster, safer, and recommended over the deprecated filter-branch. " +
+                    "Remember: ALWAYS rotate any exposed credentials immediately - assume they were already compromised. Prevention is best: use .gitignore, environment variables, and secret managers. " +
+                    "NEVER rewrite shared history without team coordination. You've learned one of git's most powerful and dangerous capabilities - use this knowledge wisely!",
                     null
                 );
             }

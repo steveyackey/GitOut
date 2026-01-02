@@ -116,26 +116,10 @@ public class Room19HookHollowFactory
 
                 // Success!
                 var successMessage = "Excellent work! You've successfully installed a git hook. " +
-                    "Git hooks are powerful automation tools that run at specific points in your git workflow:\n\n" +
-                    "[cyan]Common Hook Types:[/]\n" +
-                    "  • pre-commit - Runs before a commit is created (validate code, run linters)\n" +
-                    "  • prepare-commit-msg - Modify commit message template\n" +
-                    "  • commit-msg - Validate commit message format\n" +
-                    "  • post-commit - Run after commit (notify teams, trigger CI)\n" +
-                    "  • pre-push - Run before pushing (run tests, prevent bad pushes)\n" +
-                    "  • pre-rebase - Run before rebase operations\n\n" +
-                    "[cyan]Key Insights:[/]\n" +
-                    "  • Hooks are local and NOT committed to the repository\n" +
-                    "  • Exit code 0 = success (continue), non-zero = abort operation\n" +
-                    "  • Can be written in any language (shell, Python, Ruby, etc.)\n" +
-                    "  • Useful for enforcing team standards and catching errors early\n" +
-                    "  • Teams often share hook templates in docs, but each dev installs them\n" +
-                    (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-                        ? "  • On Windows, hooks run via Git Bash shell\n"
-                        : "  • Hooks must be executable (chmod +x) on Unix/Mac\n") +
-                    "\n[green]Pro Tip:[/] Many teams use tools like Husky (Node.js) or pre-commit (Python) " +
-                    "to manage hooks automatically across the team. These tools can commit hook configurations " +
-                    "to the repo and install them for all developers!";
+                    "Git hooks are powerful automation tools that run at specific points in your git workflow. " +
+                    "Common types include pre-commit (validate code), commit-msg (validate messages), and pre-push (run tests). " +
+                    "Hooks are local and not committed to the repository, so teams often share hook templates in documentation. " +
+                    "Many teams use tools like Husky (Node.js) or pre-commit (Python) to manage hooks automatically across the team.";
 
                 return new ChallengeResult(true, successMessage, null);
             }

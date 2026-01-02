@@ -61,8 +61,7 @@ public class Room14ReflogRuinsFactory
                     {
                         return new ChallengeResult(
                             true,
-                            "The lost commit has been recovered from the ruins! You've successfully used reflog to find and restore " +
-                            "the \"lost\" commit. Nothing is truly lost in git - the reflog remembers everything!",
+                            "The lost commit has been recovered from the ruins! You've successfully used reflog to find and restore the \"lost\" commit. Nothing is truly lost in git - the reflog remembers everything for 90 days, making it your ultimate safety net.",
                             null
                         );
                     }

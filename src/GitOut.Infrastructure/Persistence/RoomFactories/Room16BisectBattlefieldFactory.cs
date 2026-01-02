@@ -17,7 +17,7 @@ public class Room16BisectBattlefieldFactory
     {
         var challenge = new RepositoryChallenge(
             id: "bisect-battlefield-challenge",
-            description: "Use git bisect to find the commit that introduced a bug",
+            description: "Use git bisect to find the commit that introduced a bug, then reset",
             gitExecutor: _gitExecutor,
             requireGitInit: true,
             customSetup: async (workingDir, gitExec) =>
@@ -27,54 +27,143 @@ public class Room16BisectBattlefieldFactory
                 await gitExec.ExecuteAsync("config user.email \"adventurer@gitout.com\"", workingDir);
                 await gitExec.ExecuteAsync("config user.name \"Adventurer\"", workingDir);
 
-                // Create multiple commits, one will introduce a "bug"
+                // Create 10 commits - Version 6 introduces a bug in the multiply function
                 for (int i = 1; i <= 10; i++)
                 {
-                    var status = i == 6 ? "BUGGED" : "OK";
-                    await File.WriteAllTextAsync(Path.Combine(workingDir, "code.txt"),
-                        $"Version {i}\nStatus: {status}");
-                    await gitExec.ExecuteAsync("add code.txt", workingDir);
+                    // The bug: Version 6 changes * to + in the multiply function
+                    var multiplyOp = i >= 6 ? "+" : "*";
+                    var calculator = $@"# Calculator Module - Version {i}
+
+def add(a, b):
+    return a + b
+
+def subtract(a, b):
+    return a - b
+
+def multiply(a, b):
+    return a {multiplyOp} b
+
+def divide(a, b):
+    if b == 0:
+        raise ValueError(""Cannot divide by zero"")
+    return a / b
+";
+                    await File.WriteAllTextAsync(Path.Combine(workingDir, "calculator.py"), calculator);
+                    await gitExec.ExecuteAsync("add calculator.py", workingDir);
                     await gitExec.ExecuteAsync($"commit -m \"Version {i}\"", workingDir);
                 }
 
-                // Create info file
-                await File.WriteAllTextAsync(Path.Combine(workingDir, "BISECT_INFO.txt"),
-                    "A bug was introduced somewhere in commits 1-10.\n" +
-                    "The bug is in code.txt - it says 'Status: BUGGED' instead of 'Status: OK'.\n\n" +
-                    "Use git bisect to find which commit introduced it:\n" +
-                    "1. git bisect start\n" +
-                    "2. git bisect bad (current commit is bad)\n" +
-                    "3. git bisect good HEAD~9 (commit 1 was good)\n" +
-                    "4. Git will checkout commits - check code.txt each time\n" +
-                    "5. Use 'git bisect good' or 'git bisect bad' based on what you find\n" +
-                    "6. When done, 'git bisect reset' to return to normal\n\n" +
-                    "Create a file named FOUND_BUG.txt containing the commit number when you find it!");
-                await gitExec.ExecuteAsync("add BISECT_INFO.txt", workingDir);
-                await gitExec.ExecuteAsync("commit -m \"Add bisect instructions\"", workingDir);
+                // Create a test output file showing the current failure
+                var testOutput = @"=== TEST RESULTS ===
+
+Running calculator tests...
+
+test_add(2, 3) = 5          ✓ PASS
+test_subtract(5, 3) = 2     ✓ PASS
+test_multiply(4, 3) = 7     ✗ FAIL (expected 12)
+test_divide(10, 2) = 5      ✓ PASS
+
+FAILURE: multiply() returns wrong result!
+The function is adding instead of multiplying.
+
+Someone broke the multiply function, but we don't know when.
+Use git bisect to find the commit that introduced this bug.
+";
+                await File.WriteAllTextAsync(Path.Combine(workingDir, "TEST_RESULTS.txt"), testOutput);
+                await gitExec.ExecuteAsync("add TEST_RESULTS.txt", workingDir);
+                await gitExec.ExecuteAsync("commit -m \"Add failing test results\"", workingDir);
             },
             customValidator: async (workingDir, gitExec) =>
             {
-                // Check if player created the FOUND_BUG.txt file
-                var foundBugPath = Path.Combine(workingDir, "FOUND_BUG.txt");
-                if (File.Exists(foundBugPath))
+                var bisectLogPath = Path.Combine(workingDir, ".git", "BISECT_LOG");
+                var bisectStartedPath = Path.Combine(workingDir, ".git", "BISECT_START");
+                
+                // Check if bisect has been reset (challenge complete!)
+                // After reset, BISECT_LOG and BISECT_START no longer exist
+                if (!File.Exists(bisectLogPath) && !File.Exists(bisectStartedPath))
                 {
-                    var content = await File.ReadAllTextAsync(foundBugPath);
-                    if (content.Contains("6") || content.Contains("Version 6"))
+                    // Check if they completed bisect by looking at reflog for multiple checkout movements
+                    // (bisect causes multiple "checkout: moving from X to Y" entries)
+                    // Also verify they're back on the main branch
+                    var branchResult = await gitExec.ExecuteAsync("branch --show-current", workingDir);
+                    var reflogResult = await gitExec.ExecuteAsync("reflog", workingDir);
+                    
+                    var onMainBranch = branchResult.Success && 
+                        (branchResult.Output.Trim() == "main" || branchResult.Output.Trim() == "master");
+                    
+                    // Count checkout movements in reflog - bisect creates several
+                    var checkoutCount = reflogResult.Success ? 
+                        reflogResult.Output.Split('\n').Count(line => line.Contains("checkout: moving")) : 0;
+                    
+                    if (onMainBranch && checkoutCount >= 3)
                     {
+                        // They ran bisect and reset - challenge complete!
                         return new ChallengeResult(
                             true,
-                            "Victory! You've identified Version 6 as the culprit! By systematically using git bisect, you performed a binary search " +
-                            "through history to find the exact commit that introduced the bug. This is one of git's most powerful debugging tools! " +
-                            "\n\nCongratulations, brave adventurer! You've mastered the intermediate concepts of git and completed Phase 3 of your journey!",
+                            "Excellent detective work! You successfully used git bisect to find that Version 6 " +
+                            "introduced the bug, then cleaned up with git bisect reset. " +
+                            "Using binary search, you checked only ~4 commits instead of all 10. " +
+                            "In a real project with 1000 commits, bisect finds bugs in just ~10 steps!",
                             null
                         );
                     }
+                    
+                    // No evidence of bisect - they haven't started
+                    return new ChallengeResult(
+                        false,
+                        "The hunt begins! Start your bisect session with: git bisect start",
+                        "Run 'git bisect start' to begin, then 'git bisect bad' to mark the current commit as broken"
+                    );
                 }
-
+                
+                // Bisect is active - check the state
+                var bisectLog = File.Exists(bisectLogPath) ? await File.ReadAllTextAsync(bisectLogPath) : "";
+                
+                // Check if they've marked bad yet
+                if (!bisectLog.Contains("# bad:"))
+                {
+                    return new ChallengeResult(
+                        false,
+                        "Good start! Now mark the current commit as bad: git bisect bad",
+                        "The current code is broken, so mark it with 'git bisect bad'"
+                    );
+                }
+                
+                // Check if they've marked a good commit yet
+                if (!bisectLog.Contains("# good:"))
+                {
+                    return new ChallengeResult(
+                        false,
+                        "Now tell git a known good commit. Version 1 worked fine: git bisect good HEAD~10",
+                        "HEAD~10 refers to 10 commits ago (Version 1). Mark it as good so git knows the range to search."
+                    );
+                }
+                
+                // Check if bisect has completed by looking for "# first bad commit:" in the log
+                // This line only appears when bisect has identified the culprit
+                if (bisectLog.Contains("# first bad commit:") && bisectLog.Contains("Version 6"))
+                {
+                    // Bisect found Version 6 as the culprit! Now they need to reset
+                    return new ChallengeResult(
+                        false,
+                        "SUCCESS! Git bisect identified Version 6 as the first bad commit!\n\n" +
+                        "You found the bug using only ~4 checks instead of 10. But you're still in " +
+                        "bisect mode - your HEAD is detached.\n\n" +
+                        "To complete the challenge, clean up the bisect session: git bisect reset\n\n" +
+                        "This returns you to where you started (the main branch).",
+                        "Run 'git bisect reset' to end the bisect session and return to your branch"
+                    );
+                }
+                
+                // Still searching - give helpful hints
                 return new ChallengeResult(
                     false,
-                    "The bug has not been identified yet.",
-                    "Follow the instructions in BISECT_INFO.txt. Use git bisect to find the bad commit, then create FOUND_BUG.txt with the version number"
+                    "Bisect in progress! Git has checked out a commit for you to test.\n\n" +
+                    "Check the multiply function: git show HEAD:calculator.py\n" +
+                    "  • If multiply uses * → it's good: git bisect good\n" +
+                    "  • If multiply uses + → it's bad: git bisect bad\n\n" +
+                    "Keep marking until git announces the first bad commit!",
+                    "Look at calculator.py with 'git show HEAD:calculator.py' and check the multiply function"
                 );
             }
         );
@@ -83,47 +172,30 @@ public class Room16BisectBattlefieldFactory
             id: "room-16",
             name: "The Bisect Battlefield",
             description: "A battlefield where bugs are hunted through time",
-            narrative: "You enter a vast battlefield strewn with the remnants of countless commits. Each marker represents a version in history. " +
-                      "Somewhere among these commits, a bug was introduced, corrupting the code. " +
-                      "\n\nA master debugger appears: 'When you know a bug exists now but didn't before, git bisect performs a binary search " +
-                      "through history to find the exact commit that introduced it. Instead of checking every commit, it uses divide-and-conquer!' " +
-                      "\n\nThere are 11 commits in this repository. Commit 1 was good, the current commit is bad. Your mission: find which commit " +
-                      "introduced the bug." +
-                      "\n\n[yellow]═══ Command Guide ═══[/]" +
-                      "\n[cyan]git bisect start[/] - Begins a bisect session" +
-                      "\n  • Puts git into bisect mode" +
-                      "\n  • You'll mark commits as good or bad to narrow down the culprit" +
-                      "\n\n[cyan]git bisect bad [[commit]][/] - Marks a commit as bad (has the bug)" +
-                      "\n  • Without argument, marks current commit" +
-                      "\n  • Usually start with 'git bisect bad' on HEAD" +
-                      "\n\n[cyan]git bisect good [[commit]][/] - Marks a commit as good (no bug)" +
-                      "\n  • Marks the last known good commit" +
-                      "\n  • Can use HEAD~5, commit hash, or tag" +
-                      "\n\n[cyan]git bisect reset[/] - Ends bisect and returns to original commit" +
-                      "\n  • Always run this when done" +
-                      "\n  • Returns HEAD to where you started" +
-                      "\n\n[cyan]How bisect works:[/]" +
-                      "\n  • Uses binary search (O(log n) time complexity)" +
-                      "\n  • With 1000 commits, finds bug in ~10 steps" +
-                      "\n  • Each step, git checks out the middle commit" +
-                      "\n  • You test and mark it good or bad" +
-                      "\n  • Git narrows the range and repeats" +
-                      "\n\n[cyan]Advanced bisect:[/]" +
-                      "\n  • [cyan]git bisect run <script>[/] - Automates bisect with a test script" +
-                      "\n  • Script exits 0 for good, 1-127 (except 125) for bad" +
-                      "\n  • Extremely powerful for regressions with automated tests" +
-                      "\n\n[green]Pro tip:[/] Bisect is most powerful when you have good automated tests!" +
-                      "\n\n[dim]Think of bisect as binary search through git history![/]" +
-                      "\n\n[yellow]To complete this challenge:[/]" +
-                      "\n  1. A bug exists in code.txt - one version says 'BUGGED' instead of 'OK'" +
-                      "\n  2. Start bisecting: [cyan]git bisect start[/]" +
-                      "\n  3. Mark current as bad: [cyan]git bisect bad[/]" +
-                      "\n  4. Mark old commit as good: [cyan]git bisect good HEAD~9[/]" +
-                      "\n  5. Git checks out a commit - view the file: [cyan]git show HEAD:code.txt[/]" +
-                      "\n  6. If it says BUGGED, mark bad: [cyan]git bisect bad[/], else: [cyan]git bisect good[/]" +
-                      "\n  7. Repeat until git identifies the first bad commit (it's Version 6)" +
-                      "\n  8. Note the version number and reset: [cyan]git bisect reset[/]" +
-                      "\n  9. Use 'git' commands to create and commit a file named FOUND_BUG.txt containing 'Version 6'",
+            narrative: "You enter a war room filled with monitors displaying failing tests. Red warning lights flash as a frantic developer explains: " +
+                      "'Our calculator's multiply function is broken! It's returning 7 instead of 12 for 4×3. " +
+                      "We know it worked before, but with 10 versions of the code, manually checking each one would take forever!'" +
+                      "\n\nA seasoned debugger steps forward: '[cyan]git bisect[/] is your weapon here. Instead of checking every commit, " +
+                      "it uses binary search - cutting the search space in half with each step. Tell git one bad commit and one good commit, " +
+                      "and it will find the culprit in just a few checks.'" +
+                      "\n\n[yellow]═══ THE SCENARIO ═══[/]" +
+                      "\n  • [cyan]calculator.py[/] has add, subtract, multiply, and divide functions" +
+                      "\n  • The [red]multiply[/] function is broken - it's adding instead of multiplying" +
+                      "\n  • There are 10 versions of the code (commits \"Version 1\" through \"Version 10\")" +
+                      "\n  • The bug was introduced in one of these commits - find which one!" +
+                      "\n\n[yellow]═══ HOW TO BISECT ═══[/]" +
+                      "\n[white]1. Start:[/]        [cyan]git bisect start[/]" +
+                      "\n[white]2. Mark bad:[/]     [cyan]git bisect bad[/]          [dim](current code is broken)[/]" +
+                      "\n[white]3. Mark good:[/]    [cyan]git bisect good HEAD~10[/]  [dim](Version 1 was fine)[/]" +
+                      "\n[white]4. Test:[/]         [cyan]git show HEAD:calculator.py[/]" +
+                      "\n[white]5. Mark result:[/]  [cyan]git bisect good[/] or [cyan]git bisect bad[/]" +
+                      "\n[white]6. Repeat:[/]       Steps 4-5 until git announces \"first bad commit\"" +
+                      "\n[white]7. Clean up:[/]     [cyan]git bisect reset[/]        [dim](return to your branch)[/]" +
+                      "\n\n[yellow]═══ WHY BISECT IS POWERFUL ═══[/]" +
+                      "\n  • Binary search = O(log n) complexity" +
+                      "\n  • 10 commits → ~4 checks | 1000 commits → ~10 checks | 1,000,000 commits → ~20 checks" +
+                      "\n  • Remember: [cyan]HEAD~10[/] means \"10 commits before HEAD\" (you learned about HEAD earlier!)" +
+                      "\n\n[dim]The challenge completes when you find the bad commit AND run git bisect reset.[/]",
             challenge: challenge,
             exits: new Dictionary<string, string> { { "forward", "room-17" } },
             isStartRoom: false,

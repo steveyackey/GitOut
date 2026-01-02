@@ -51,7 +51,7 @@ public class Room03HistoryArchiveFactory
                 {
                     return new ChallengeResult(
                         true,
-                        "You've successfully viewed the ancient chronicles!",
+                        "You've successfully viewed the ancient chronicles! The commit history reveals the story of this repository's evolution. Understanding git log is essential for navigating any project's history.",
                         null
                     );
                 }

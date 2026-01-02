@@ -72,7 +72,7 @@ public class Room09ConflictCatacombsFactory
                 {
                     return new ChallengeResult(
                         true,
-                        "The conflicting energies have been harmonized! You've successfully resolved the merge conflict and unified the timelines!",
+                        "The conflicting energies have been harmonized! You've successfully resolved the merge conflict and unified the timelines. Conflict resolution is one of the most important skills in collaborative development.",
                         null
                     );
                 }

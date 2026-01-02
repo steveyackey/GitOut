@@ -34,6 +34,13 @@ public class Room15RemoteRealmFactory
 
                 // Create a "remote" repository in a separate directory (simulated remote)
                 var remotePath = Path.Combine(Path.GetDirectoryName(workingDir)!, "remote-repo.git");
+                
+                // Clean up any existing remote repo from previous attempts
+                if (Directory.Exists(remotePath))
+                {
+                    Directory.Delete(remotePath, recursive: true);
+                }
+                
                 Directory.CreateDirectory(remotePath);
                 await gitExec.ExecuteAsync("init --bare", remotePath);
 
@@ -81,9 +88,7 @@ public class Room15RemoteRealmFactory
 
                 return new ChallengeResult(
                     true,
-                    "The portal to the remote realm has been opened AND your work has been transmitted! You've successfully " +
-                    "configured a remote repository connection and pushed your commits. " +
-                    "In real projects, this would be GitHub, GitLab, or another server. Remotes enable collaboration and backup!",
+                    "The portal to the remote realm has been opened AND your work has been transmitted! You've successfully configured a remote repository connection and pushed your commits. In real projects, this would be GitHub, GitLab, or another server, enabling collaboration and backup.",
                     null
                 );
             }
@@ -127,8 +132,7 @@ public class Room15RemoteRealmFactory
                       "\n  1. View the remote path: [cyan]git show HEAD:REMOTE_PATH.txt[/]" +
                       "\n  2. Add the remote: [cyan]git remote add origin <path-from-REMOTE_PATH.txt>[/]" +
                       "\n  3. Verify the remote: [cyan]git remote -v[/]" +
-                      "\n  4. Push your commits to the remote: [cyan]git push -u origin main[/]" +
-                      "\n     (use 'master' instead of 'main' if that's your branch name)",
+                      "\n  4. Push your commits to the remote: [cyan]git push -u origin main[/]",
             challenge: challenge,
             exits: new Dictionary<string, string> { { "forward", "room-16" } },
             isStartRoom: false,

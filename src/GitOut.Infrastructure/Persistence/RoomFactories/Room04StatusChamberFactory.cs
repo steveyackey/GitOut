@@ -51,7 +51,7 @@ public class Room04StatusChamberFactory
                 {
                     return new ChallengeResult(
                         true,
-                        "You've successfully examined the state of the repository!",
+                        "You've successfully examined the state of the repository! Understanding git status is crucial for knowing what changes exist in your working directory and staging area. This command will become your constant companion in daily git work.",
                         null
                     );
                 }

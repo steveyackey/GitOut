@@ -48,7 +48,7 @@ public class Room07RestorationVaultFactory
                     {
                         return new ChallengeResult(
                             true,
-                            "The sacred text has been restored to its original form!",
+                            "The sacred text has been restored to its original form! You've learned how to discard unwanted changes and return files to their last committed state. Git restore is your safety net when experiments go wrong.",
                             null
                         );
                     }

@@ -52,8 +52,7 @@ public class Room13TagTowerFactory
                 {
                     return new ChallengeResult(
                         true,
-                        "The version markers have been placed in the tower! You've successfully tagged important releases, " +
-                        "making it easy to reference and return to these specific versions in the future!",
+                        "The version markers have been placed in the tower! You've successfully tagged important releases, making it easy to reference and return to these specific versions in the future. Tags are permanent bookmarks for significant moments in your project's history.",
                         null
                     );
                 }
