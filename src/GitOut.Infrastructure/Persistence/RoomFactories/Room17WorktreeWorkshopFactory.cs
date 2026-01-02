@@ -124,8 +124,8 @@ public class Room17WorktreeWorkshopFactory
                       "\n\n[cyan]git worktree list[/] - Show all worktrees" +
                       "\n  • Lists all worktrees with their paths, commits, and branches" +
                       "\n  • Example output:" +
-                      "\n    /home/user/project      abc123 [main]" +
-                      "\n    /home/user/feature-work def456 [feature]" +
+                      "\n    /home/user/project      abc123 [[main]]" +
+                      "\n    /home/user/feature-work def456 [[feature]]" +
                       "\n\n[cyan]git worktree remove <path>[/] - Remove a worktree" +
                       "\n  • Deletes the worktree directory and unregisters it" +
                       "\n  • Example: git worktree remove ../feature-work" +

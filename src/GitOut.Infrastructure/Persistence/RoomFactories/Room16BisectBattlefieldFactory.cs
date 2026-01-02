@@ -93,10 +93,10 @@ public class Room16BisectBattlefieldFactory
                       "\n[cyan]git bisect start[/] - Begins a bisect session" +
                       "\n  • Puts git into bisect mode" +
                       "\n  • You'll mark commits as good or bad to narrow down the culprit" +
-                      "\n\n[cyan]git bisect bad [commit][/] - Marks a commit as bad (has the bug)" +
+                      "\n\n[cyan]git bisect bad [[commit]][/] - Marks a commit as bad (has the bug)" +
                       "\n  • Without argument, marks current commit" +
                       "\n  • Usually start with 'git bisect bad' on HEAD" +
-                      "\n\n[cyan]git bisect good [commit][/] - Marks a commit as good (no bug)" +
+                      "\n\n[cyan]git bisect good [[commit]][/] - Marks a commit as good (no bug)" +
                       "\n  • Marks the last known good commit" +
                       "\n  • Can use HEAD~5, commit hash, or tag" +
                       "\n\n[cyan]git bisect reset[/] - Ends bisect and returns to original commit" +
