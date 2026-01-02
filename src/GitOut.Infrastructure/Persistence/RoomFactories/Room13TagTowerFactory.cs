@@ -110,7 +110,14 @@ public class Room13TagTowerFactory
                       "\n  3. Tag it: [cyan]git tag v1.0.0 <commit-hash>[/]" +
                       "\n  4. Find the commit with 'version 2.0.0' message and note its hash" +
                       "\n  5. Tag it: [cyan]git tag v2.0.0 <commit-hash>[/]" +
-                      "\n  6. Verify your tags: [cyan]git tag[/]",
+                      "\n  6. Verify your tags: [cyan]git tag[/]" +
+                      "\n\n[dim]═══ Tip: Pushing Tags to Remote ═══[/]" +
+                      "\n[dim]Tags are local by default. To share them with a remote repository:[/]" +
+                      "\n  [cyan]git push origin <tag-name>[/]  - Push a single tag" +
+                      "\n  [cyan]git push origin --tags[/]     - Push all tags" +
+                      "\n\n[dim]Don't run these commands here (no remote configured), but we'll learn" +
+                      "\nmore about remotes soon. This is how you'd share your version tags with" +
+                      "\nyour team on GitHub, GitLab, or other hosting services.[/]",
             challenge: challenge,
             exits: new Dictionary<string, string> { { "forward", "room-14" } },
             isStartRoom: false,
