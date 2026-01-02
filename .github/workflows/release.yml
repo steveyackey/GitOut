@@ -234,38 +234,46 @@ jobs:
         with:
           path: artifacts
 
-      - name: Package artifacts
+      - name: Prepare binaries
         run: |
-          cd artifacts
-          zip -r ../gitout-win-x64.zip gitout-win-x64/
-          tar -czvf ../gitout-linux-x64.tar.gz gitout-linux-x64/
-          tar -czvf ../gitout-linux-arm64.tar.gz gitout-linux-arm64/
-          tar -czvf ../gitout-macos-arm64.tar.gz gitout-macos-arm64/
+          # Rename binaries to include platform suffix for direct download
+          mv artifacts/gitout-win-x64/gitout.exe gitout-win-x64.exe
+          mv artifacts/gitout-linux-x64/gitout gitout-linux-x64
+          mv artifacts/gitout-linux-arm64/gitout gitout-linux-arm64
+          mv artifacts/gitout-macos-arm64/gitout gitout-macos-arm64
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            gitout-win-x64.zip
-            gitout-linux-x64.tar.gz
-            gitout-linux-arm64.tar.gz
-            gitout-macos-arm64.tar.gz
+            gitout-win-x64.exe
+            gitout-linux-x64
+            gitout-linux-arm64
+            gitout-macos-arm64
           generate_release_notes: true
           body: |
             ## Installation
 
-            Download the appropriate archive for your platform and extract it.
+            Download the binary for your platform:
 
-            ### macOS
+            ```bash
+            # macOS (Apple Silicon)
+            curl -L https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/gitout-macos-arm64 -o gitout
+            chmod +x gitout
+
+            # Linux x64
+            curl -L https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/gitout-linux-x64 -o gitout
+            chmod +x gitout
+
+            # Linux ARM64
+            curl -L https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/gitout-linux-arm64 -o gitout
+            chmod +x gitout
+            ```
+
+            ### macOS Gatekeeper
             If macOS blocks the binary, run:
             ```bash
             xattr -cr ./gitout
-            ```
-
-            ### Linux
-            Make sure the binary is executable:
-            ```bash
-            chmod +x ./gitout
             ```
 
             ### Docker

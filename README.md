@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/screenshot.png" alt="GitOut - A Dungeon Crawler That Teaches Git" width="600">
+</p>
+
 # GitOut
 
 A dungeon crawler game that teaches git through real command-line experience.
@@ -8,21 +12,20 @@ A dungeon crawler game that teaches git through real command-line experience.
 
 ```bash
 # macOS (Apple Silicon)
-curl -L https://github.com/steveyackey/gitout/releases/latest/download/gitout-macos-arm64.tar.gz | tar xz
-./gitout
+curl -L https://github.com/steveyackey/gitout/releases/latest/download/gitout-macos-arm64 -o gitout
+chmod +x gitout && ./gitout
 
 # Linux x64
-curl -L https://github.com/steveyackey/gitout/releases/latest/download/gitout-linux-x64.tar.gz | tar xz
-./gitout
+curl -L https://github.com/steveyackey/gitout/releases/latest/download/gitout-linux-x64 -o gitout
+chmod +x gitout && ./gitout
 
 # Linux ARM64
-curl -L https://github.com/steveyackey/gitout/releases/latest/download/gitout-linux-arm64.tar.gz | tar xz
-./gitout
+curl -L https://github.com/steveyackey/gitout/releases/latest/download/gitout-linux-arm64 -o gitout
+chmod +x gitout && ./gitout
 
 # Windows (PowerShell)
-Invoke-WebRequest -Uri https://github.com/steveyackey/gitout/releases/latest/download/gitout-win-x64.zip -OutFile gitout.zip
-Expand-Archive gitout.zip -DestinationPath .
-.\GitOut.Console.exe
+Invoke-WebRequest -Uri https://github.com/steveyackey/gitout/releases/latest/download/gitout-win-x64.exe -OutFile gitout.exe
+.\gitout.exe
 ```
 
 ### Docker
