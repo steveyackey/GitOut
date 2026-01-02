@@ -229,7 +229,7 @@ public static class SplashScreen
             "        ██▀   ┌──────────┐   ▀██        ",
             "       ██     │  ENTER   │     ██       ",
             "       ██     └────┬┬────┘     ██       ",
-            "       ██▄▄▄▄▄▄▄▄▄██▄▄▄▄▄▄▄▄▄▄▄██       "
+            "       ██▄▄▄▄▄▄▄▄▄▄██▄▄▄▄▄▄▄▄▄▄██       "
         };
 
         foreach (var line in entranceArt)
