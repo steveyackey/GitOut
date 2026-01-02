@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using GitOut.Application.Interfaces;
 using GitOut.Application.Services;
 using GitOut.Application.UseCases;
@@ -9,6 +10,23 @@ using GitOut.Infrastructure.Git;
 using GitOut.Infrastructure.Persistence;
 using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console;
+
+// Check if git is installed before anything else
+if (!IsGitInstalled())
+{
+    AnsiConsole.MarkupLine("[red bold]Error: Git is not installed or not found in PATH[/]");
+    AnsiConsole.WriteLine();
+    AnsiConsole.MarkupLine("[yellow]GitOut requires Git to be installed to run.[/]");
+    AnsiConsole.WriteLine();
+    AnsiConsole.MarkupLine("[blue]Installation instructions:[/]");
+    AnsiConsole.MarkupLine("  • [bold]macOS:[/] brew install git");
+    AnsiConsole.MarkupLine("  • [bold]Ubuntu/Debian:[/] sudo apt install git");
+    AnsiConsole.MarkupLine("  • [bold]Fedora:[/] sudo dnf install git");
+    AnsiConsole.MarkupLine("  • [bold]Windows:[/] Download from https://git-scm.com/download/win");
+    AnsiConsole.WriteLine();
+    AnsiConsole.MarkupLine("[dim]After installing, restart your terminal and try again.[/]");
+    return;
+}
 
 // Setup Dependency Injection
 var services = new ServiceCollection();
@@ -226,4 +244,33 @@ finally
 {
     // Cleanup temporary directories
     tempDirManager.Dispose();
+}
+
+static bool IsGitInstalled()
+{
+    try
+    {
+        using var process = new Process
+        {
+            StartInfo = new ProcessStartInfo
+            {
+                FileName = "git",
+                Arguments = "--version",
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            }
+        };
+        
+        process.Start();
+        process.WaitForExit(5000); // 5 second timeout
+        
+        return process.ExitCode == 0;
+    }
+    catch
+    {
+        // Git executable not found
+        return false;
+    }
 }
