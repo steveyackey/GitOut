@@ -124,7 +124,7 @@ public class Room15RemoteRealmFactory
                       "\n  • Access your code from anywhere" +
                       "\n\n[dim]Think of remotes as bookmarks to other repositories![/]" +
                       "\n\n[yellow]To complete this challenge:[/]" +
-                      "\n  1. The REMOTE_PATH.txt file contains the repository path" +
+                      "\n  1. View the remote path: [cyan]git show HEAD:REMOTE_PATH.txt[/]" +
                       "\n  2. Add the remote: [cyan]git remote add origin <path-from-REMOTE_PATH.txt>[/]" +
                       "\n  3. Verify the remote: [cyan]git remote -v[/]" +
                       "\n  4. Push your commits to the remote: [cyan]git push -u origin main[/]" +
