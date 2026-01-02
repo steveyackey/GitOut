@@ -128,8 +128,7 @@ public class Room15RemoteRealmFactory
                       "\n  2. Add the remote: [cyan]git remote add origin <path-from-REMOTE_PATH.txt>[/]" +
                       "\n  3. Verify the remote: [cyan]git remote -v[/]" +
                       "\n  4. Push your commits to the remote: [cyan]git push -u origin main[/]" +
-                      "\n     (use 'master' instead of 'main' if that's your branch name)" +
-                      "\n  5. Verify with: [cyan]git log --oneline origin/main[/]",
+                      "\n     (use 'master' instead of 'main' if that's your branch name)",
             challenge: challenge,
             exits: new Dictionary<string, string> { { "forward", "room-16" } },
             isStartRoom: false,
