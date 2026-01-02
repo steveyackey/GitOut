@@ -17,7 +17,7 @@ public class Room15RemoteRealmFactory
     {
         var challenge = new RepositoryChallenge(
             id: "remote-realm-challenge",
-            description: "Set up a simulated remote repository connection",
+            description: "Set up a simulated remote repository connection and push your work",
             gitExecutor: _gitExecutor,
             requireGitInit: true,
             customSetup: async (workingDir, gitExec) =>
@@ -57,20 +57,34 @@ public class Room15RemoteRealmFactory
                     );
                 }
 
-                if (remotes.Contains("origin"))
+                if (!remotes.Contains("origin"))
                 {
                     return new ChallengeResult(
-                        true,
-                        "The portal to the remote realm has been opened! You've successfully configured a remote repository connection. " +
-                        "In real projects, this would be GitHub, GitLab, or another server. Remotes enable collaboration and backup!",
-                        null
+                        false,
+                        "A remote exists but it's not named 'origin'.",
+                        "Use 'git remote add origin <path>' to add a remote named 'origin'"
+                    );
+                }
+
+                // Check if commits have been pushed to the remote
+                // Check if the remote has any refs (indicating a push was made)
+                var remoteRefsResult = await gitExec.ExecuteAsync("ls-remote origin", workingDir);
+                
+                if (!remoteRefsResult.Success || string.IsNullOrWhiteSpace(remoteRefsResult.Output) || !remoteRefsResult.Output.Contains("refs/heads/"))
+                {
+                    return new ChallengeResult(
+                        false,
+                        "Remote 'origin' is configured, but you haven't pushed your commits yet!",
+                        "Use 'git push -u origin main' (or 'master') to push your local commits to the remote"
                     );
                 }
 
                 return new ChallengeResult(
-                    false,
-                    "A remote exists but it's not named 'origin'.",
-                    "Use 'git remote add origin <path>' to add a remote named 'origin'"
+                    true,
+                    "The portal to the remote realm has been opened AND your work has been transmitted! You've successfully " +
+                    "configured a remote repository connection and pushed your commits. " +
+                    "In real projects, this would be GitHub, GitLab, or another server. Remotes enable collaboration and backup!",
+                    null
                 );
             }
         );
@@ -85,7 +99,7 @@ public class Room15RemoteRealmFactory
                       "\"origin\" - typically your GitHub, GitLab, or Bitbucket repository. Remotes let you push your work for backup " +
                       "and collaboration, and fetch others' work.' " +
                       "\n\nA simulated remote repository has been prepared for you. The file REMOTE_PATH.txt in your working directory contains the path you'll need. " +
-                      "You need to connect to it by adding it as a remote named 'origin'." +
+                      "You need to connect to it by adding it as a remote named 'origin', then push your local commits to share them with the remote realm!" +
                       "\n\n[yellow]═══ Command Guide ═══[/]" +
                       "\n[cyan]git remote add <name> <url>[/] - Adds a new remote repository" +
                       "\n  • <name> is typically 'origin' (the default remote)" +
@@ -112,7 +126,10 @@ public class Room15RemoteRealmFactory
                       "\n\n[yellow]To complete this challenge:[/]" +
                       "\n  1. The REMOTE_PATH.txt file contains the repository path" +
                       "\n  2. Add the remote: [cyan]git remote add origin <path-from-REMOTE_PATH.txt>[/]" +
-                      "\n  3. Verify the remote: [cyan]git remote -v[/]",
+                      "\n  3. Verify the remote: [cyan]git remote -v[/]" +
+                      "\n  4. Push your commits to the remote: [cyan]git push -u origin main[/]" +
+                      "\n     (use 'master' instead of 'main' if that's your branch name)" +
+                      "\n  5. Verify with: [cyan]git log --oneline origin/main[/]",
             challenge: challenge,
             exits: new Dictionary<string, string> { { "forward", "room-16" } },
             isStartRoom: false,
