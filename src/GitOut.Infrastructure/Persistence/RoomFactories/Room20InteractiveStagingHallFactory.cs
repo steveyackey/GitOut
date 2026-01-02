@@ -163,23 +163,6 @@ function subtract(a, b) {
                       "But when it's time to commit, you want clean, focused commits—each representing one logical change.'" +
                       "\n\n'Git's interactive staging (git add -p) lets you stage specific changes within a file, not just entire files. " +
                       "You can pick and choose which hunks (chunks of changes) to commit, creating focused, reviewable commits.'" +
-                      "\n\n[yellow]The Challenge:[/]" +
-                      "\n  • You've modified utils.js with THREE separate changes" +
-                      "\n  • Create a commit with ONLY the greet() validation change" +
-                      "\n  • Leave multiply() and subtract() functions unstaged" +
-                      "\n\n[yellow]Steps to Complete:[/]" +
-                      "\n  1. Read CHALLENGE.txt for full details" +
-                      "\n  2. Check current status: [cyan]git status[/]" +
-                      "\n  3. View all changes: [cyan]git diff utils.js[/]" +
-                      "\n  4. Stage selectively: [cyan]git add -p utils.js[/]" +
-                      "\n  5. When prompted for each hunk:" +
-                      "\n     • Type 'y' to stage the greet validation hunk" +
-                      "\n     • Type 'n' to skip the multiply and subtract hunks" +
-                      "\n     • Type '?' if you need help with options" +
-                      "\n  6. Verify what's staged: [cyan]git diff --cached[/]" +
-                      "\n  7. Verify what remains unstaged: [cyan]git diff[/]" +
-                      "\n  8. Commit: [cyan]git commit -m 'Add validation to greet'[/]" +
-                      "\n  9. Confirm unstaged changes remain: [cyan]git status[/]" +
                       "\n\n[yellow]═══ Command Guide ═══[/]" +
                       "\n[cyan]git add -p <file>[/] - Interactively stage changes (patch mode)" +
                       "\n  • Shows each change (hunk) separately" +
@@ -208,7 +191,24 @@ function subtract(a, b) {
                       "\n  • Use 'e' to manually edit hunks (advanced)" +
                       "\n  • git add -p works great with git commit --verbose to review staged changes" +
                       "\n  • This technique creates cleaner git history for code review" +
-                      "\n\n[dim]Selective staging: the key to logical, focused commits![/]",
+                      "\n\n[dim]Selective staging: the key to logical, focused commits![/]" +
+                      "\n\n[yellow]The Challenge:[/]" +
+                      "\n  • You've modified utils.js with THREE separate changes" +
+                      "\n  • Create a commit with ONLY the greet() validation change" +
+                      "\n  • Leave multiply() and subtract() functions unstaged" +
+                      "\n\n[yellow]Steps to Complete:[/]" +
+                      "\n  1. Read CHALLENGE.txt for full details" +
+                      "\n  2. Check current status: [cyan]git status[/]" +
+                      "\n  3. View all changes: [cyan]git diff utils.js[/]" +
+                      "\n  4. Stage selectively: [cyan]git add -p utils.js[/]" +
+                      "\n  5. When prompted for each hunk:" +
+                      "\n     • Type 'y' to stage the greet validation hunk" +
+                      "\n     • Type 'n' to skip the multiply and subtract hunks" +
+                      "\n     • Type '?' if you need help with options" +
+                      "\n  6. Verify what's staged: [cyan]git diff --cached[/]" +
+                      "\n  7. Verify what remains unstaged: [cyan]git diff[/]" +
+                      "\n  8. Commit: [cyan]git commit -m 'Add validation to greet'[/]" +
+                      "\n  9. Confirm unstaged changes remain: [cyan]git status[/]",
             challenge: challenge,
             exits: new Dictionary<string, string> { { "forward", "room-21" } },
             isStartRoom: false,

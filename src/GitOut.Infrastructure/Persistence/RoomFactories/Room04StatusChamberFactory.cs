@@ -72,14 +72,14 @@ public class Room04StatusChamberFactory
                       "one shows files in pristine condition, another shows files in flux, and the third shows files in shadow. " +
                       "A plaque reads: 'Understanding the state of your realm is the key to mastery. " +
                       "Files exist in many states: tracked, modified, staged, and untracked.' " +
-                      "\n\nUse [cyan]git status[/] to understand the current state of the repository." +
                       "\n\n[yellow]═══ Command Guide ═══[/]" +
                       "\n[cyan]git status[/] - Shows the current state of your working directory and staging area" +
                       "\n  • Lists which files are modified (changed but not staged)" +
                       "\n  • Lists which files are staged (ready to be committed)" +
                       "\n  • Lists which files are untracked (not yet added to git)" +
                       "\n  • Shows which branch you're on" +
-                      "\n  • Use this constantly to see what's happening in your repo!",
+                      "\n  • Use this constantly to see what's happening in your repo!" +
+                      "\n\nRun [cyan]git status[/] to understand the current state of the repository.",
             challenge: challenge,
             exits: new Dictionary<string, string> { { "forward", "room-5" } },
             isStartRoom: false,

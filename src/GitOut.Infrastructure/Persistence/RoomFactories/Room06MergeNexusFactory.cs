@@ -109,13 +109,6 @@ public class Room06MergeNexusFactory
                       "\n\nAn ancient tome materializes: 'To master git, you must learn to work in parallel timelines. " +
                       "Create your work on a feature branch, then merge it back when ready.' " +
                       "\n\nYou are currently on 'main'. A 'my-feature' branch exists with three powerful spell scrolls waiting to be preserved!" +
-                      "\n\n[yellow]Complete these steps:[/]" +
-                      "\n  1. Switch to the my-feature branch: [cyan]git checkout my-feature[/] (or [cyan]git switch my-feature[/])" +
-                      "\n  2. Check the status to see the spell files: [cyan]git status[/]" +
-                      "\n  3. Stage ALL the spell files at once: [cyan]git add .[/]" +
-                      "\n  4. Commit the spells: [cyan]git commit -m \"Add three combat spells\"[/]" +
-                      "\n  5. Switch back to main: [cyan]git checkout main[/]" +
-                      "\n  6. Merge the my-feature branch: [cyan]git merge my-feature[/]" +
                       "\n\n[yellow]═══ Command Guide ═══[/]" +
                       "\n[cyan]git add .[/] - Stages ALL modified and new files in the current directory" +
                       "\n  • The '.' means 'current directory and everything in it'" +
@@ -128,7 +121,14 @@ public class Room06MergeNexusFactory
                       "\n\n[cyan]git merge <branch>[/] - Combines another branch into your current branch" +
                       "\n  • Takes commits from the specified branch and adds them to your current branch" +
                       "\n  • Must be on the branch you want to merge INTO (usually main)" +
-                      "\n  • Creates a unified history from two separate lines of development",
+                      "\n  • Creates a unified history from two separate lines of development" +
+                      "\n\n[yellow]Complete these steps:[/]" +
+                      "\n  1. Switch to the my-feature branch: [cyan]git checkout my-feature[/] (or [cyan]git switch my-feature[/])" +
+                      "\n  2. Check the status to see the spell files: [cyan]git status[/]" +
+                      "\n  3. Stage ALL the spell files at once: [cyan]git add .[/]" +
+                      "\n  4. Commit the spells: [cyan]git commit -m \"Add three combat spells\"[/]" +
+                      "\n  5. Switch back to main: [cyan]git checkout main[/]" +
+                      "\n  6. Merge the my-feature branch: [cyan]git merge my-feature[/]",
             challenge: challenge,
             exits: new Dictionary<string, string> { { "forward", "room-7" } },
             isStartRoom: false,

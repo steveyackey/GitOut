@@ -154,13 +154,6 @@ public class Room19HookHollowFactory
                       "\n  • They run automatically at specific git events (commit, push, etc.)" +
                       "\n  • Can prevent bad commits, enforce code quality, run tests" +
                       "\n  • If a hook exits with non-zero code, the git operation is aborted" +
-                      "\n\n[yellow]Your Mission:[/]" +
-                      "\n  1. Read HOOK_INSTRUCTIONS.txt for details" +
-                      "\n  2. Copy pre-commit-template to .git/hooks/pre-commit" +
-                      (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-                          ? "\n  3. On Windows, the hook will work once copied"
-                          : "\n  3. Make it executable with chmod +x .git/hooks/pre-commit") +
-                      "\n  4. The hook will prevent commits with console.log statements" +
                       "\n\n[yellow]═══ Hook Commands ═══[/]" +
                       "\n[cyan]ls .git/hooks/[/] - List available hook files" +
                       "\n  • Git provides sample hooks (*.sample files)" +
@@ -188,7 +181,14 @@ public class Room19HookHollowFactory
                       "\n  • Share hook templates in repo docs or use hook managers (Husky, pre-commit)" +
                       "\n  • Use hooks to catch errors early, before CI/CD runs" +
                       "\n  • Exit with code 0 for success, non-zero to abort the git operation" +
-                      "\n\n[dim]Hooks are your repository's guardians, enforcing quality at every step![/]",
+                      "\n\n[dim]Hooks are your repository's guardians, enforcing quality at every step![/]" +
+                      "\n\n[yellow]Your Mission:[/]" +
+                      "\n  1. Read HOOK_INSTRUCTIONS.txt for details" +
+                      "\n  2. Copy pre-commit-template to .git/hooks/pre-commit" +
+                      (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+                          ? "\n  3. On Windows, the hook will work once copied"
+                          : "\n  3. Make it executable with chmod +x .git/hooks/pre-commit") +
+                      "\n  4. The hook will prevent commits with console.log statements",
             challenge: challenge,
             exits: new Dictionary<string, string> { { "forward", "room-20" } },
             isStartRoom: false,

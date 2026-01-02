@@ -34,9 +34,6 @@ public class Room02StagingAreaFactory
                       "The door behind you seals shut with a resonant boom. An inscription appears on the wall: " +
                       "'To escape, you must preserve this knowledge - stage the scroll and seal it with a commit.' " +
                       "\n\nThe scroll (README.md) has appeared in your working directory. " +
-                      "\n\nTo complete this challenge:" +
-                      "\n  1. Stage the file: [cyan]git add README.md[/]" +
-                      "\n  2. Commit the changes: [cyan]git commit -m \"Seal the ancient scroll\"[/]" +
                       "\n\n[yellow]═══ Command Guide ═══[/]" +
                       "\n[cyan]git add <file>[/] - Stages a file, preparing it for commit" +
                       "\n  • Tells git 'I want to save this file in my next snapshot'" +
@@ -45,7 +42,10 @@ public class Room02StagingAreaFactory
                       "\n\n[cyan]git commit -m \"message\"[/] - Creates a permanent snapshot of all staged changes" +
                       "\n  • Saves your staged files to the repository history" +
                       "\n  • The message describes what changed and why" +
-                      "\n  • Creates a 'save point' you can return to later",
+                      "\n  • Creates a 'save point' you can return to later" +
+                      "\n\nTo complete this challenge:" +
+                      "\n  1. Stage the file: [cyan]git add README.md[/]" +
+                      "\n  2. Commit the changes: [cyan]git commit -m \"Seal the ancient scroll\"[/]",
             challenge: challenge,
             exits: new Dictionary<string, string> { { "forward", "room-3" } },
             isStartRoom: false,

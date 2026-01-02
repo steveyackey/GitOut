@@ -10,25 +10,9 @@ namespace GitOut.Console.UI;
 /// </summary>
 public class GameRenderer
 {
-    public void RenderWelcome()
+    public void RenderWelcome(bool animate = true)
     {
-        AnsiConsole.Clear();
-
-        var title = new FigletText("GitOut")
-            .Centered()
-            .Color(Color.Cyan1);
-
-        AnsiConsole.Write(title);
-
-        var subtitle = new Panel(
-            new Markup("[bold yellow]A Dungeon Crawler That Teaches Git[/]\n\n" +
-                      "[dim]Learn git commands by escaping the dungeon![/]"))
-            .BorderColor(Color.Cyan1)
-            .Padding(1, 0)
-            .Expand();
-
-        AnsiConsole.Write(subtitle);
-        AnsiConsole.WriteLine();
+        SplashScreen.Show(animate);
     }
 
     public void RenderRoom(Room room, Player player)

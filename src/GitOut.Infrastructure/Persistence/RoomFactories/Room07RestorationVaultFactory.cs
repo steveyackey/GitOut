@@ -71,10 +71,6 @@ public class Room07RestorationVaultFactory
                       "A guardian spirit whispers: 'Fear not, for git remembers all. Every committed change is preserved. " +
                       "You can restore files to their last committed state, undoing unwanted modifications.' " +
                       "\n\nThe sacred-text.txt file has been corrupted!" +
-                      "\n\n[yellow]To complete this challenge:[/]" +
-                      "\n  1. Check the file status: [cyan]git status[/]" +
-                      "\n  2. See what changed: [cyan]git diff sacred-text.txt[/]" +
-                      "\n  3. Restore the original: [cyan]git restore sacred-text.txt[/]" +
                       "\n\n[yellow]═══ Command Guide ═══[/]" +
                       "\n[cyan]git diff <file>[/] - Shows exactly what changed in a file" +
                       "\n  • Compares working directory to last commit" +
@@ -86,7 +82,11 @@ public class Room07RestorationVaultFactory
                       "\n  • [red]Doesn't work on:[/] Committed changes or untracked files" +
                       "\n  • WARNING: This permanently deletes your uncommitted changes!" +
                       "\n  • Older alternative: 'git checkout -- <file>' (still works)" +
-                      "\n\n[dim]Think of commits as save points - restore takes you back to the last save![/]",
+                      "\n\n[dim]Think of commits as save points - restore takes you back to the last save![/]" +
+                      "\n\n[yellow]To complete this challenge:[/]" +
+                      "\n  1. Check the file status: [cyan]git status[/]" +
+                      "\n  2. See what changed: [cyan]git diff sacred-text.txt[/]" +
+                      "\n  3. Restore the original: [cyan]git restore sacred-text.txt[/]",
             challenge: challenge,
             exits: new Dictionary<string, string> { { "forward", "room-8" } },
             isStartRoom: false,

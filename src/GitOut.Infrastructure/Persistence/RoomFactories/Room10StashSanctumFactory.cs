@@ -85,11 +85,6 @@ public class Room10StashSanctumFactory
                       "The stash allows you to save your work in progress without committing it, giving you a clean working directory.' " +
                       "\n\nYou notice that quest-log.txt has been modified with unfinished work, and there's also an untracked notes.txt file. " +
                       "You need to stash ALL changes to get a completely clean working directory!" +
-                      "\n\n[yellow]To complete this challenge:[/]" +
-                      "\n  1. Check your current changes: [cyan]git status[/]" +
-                      "\n  2. View the diff: [cyan]git diff[/]" +
-                      "\n  3. Stash your work INCLUDING untracked files: [cyan]git stash -u[/]" +
-                      "\n  4. Verify working directory is clean: [cyan]git status[/]" +
                       "\n\n[yellow]═══ Command Guide ═══[/]" +
                       "\n[cyan]git stash[/] - Saves your uncommitted changes and gives you a clean working directory" +
                       "\n  • Stores both staged and unstaged changes" +
@@ -104,7 +99,12 @@ public class Room10StashSanctumFactory
                       "\n  • Removes the stash after applying" +
                       "\n  • Use 'git stash apply' to keep the stash in the list" +
                       "\n\n[cyan]git stash drop[/] - Deletes a stash without applying it" +
-                      "\n\n[dim]Think of stash as a clipboard for your work in progress![/]",
+                      "\n\n[dim]Think of stash as a clipboard for your work in progress![/]" +
+                      "\n\n[yellow]To complete this challenge:[/]" +
+                      "\n  1. Check your current changes: [cyan]git status[/]" +
+                      "\n  2. View the diff: [cyan]git diff[/]" +
+                      "\n  3. Stash your work INCLUDING untracked files: [cyan]git stash -u[/]" +
+                      "\n  4. Verify working directory is clean: [cyan]git status[/]",
             challenge: challenge,
             exits: new Dictionary<string, string> { { "forward", "room-11" } },
             isStartRoom: false,

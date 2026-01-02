@@ -96,15 +96,6 @@ public class Room09ConflictCatacombsFactory
                       "automatically decide which version to keep. This is a MERGE CONFLICT - one of the most important " +
                       "skills to master!' " +
                       "\n\nThe merge has already been attempted and failed. The spell-book.txt file now contains conflict markers." +
-                      "\n\n[yellow]To resolve this conflict:[/]" +
-                      "\n  1. Check the status: [cyan]git status[/]" +
-                      "\n  2. View the conflict in the file: [cyan]git diff spell-book.txt[/]" +
-                      "\n  3. For simple conflicts, git provides shortcuts to choose a version:" +
-                      "\n     [cyan]git checkout --ours spell-book.txt[/]   (keep main's version: 'Elemental Fire Magic')" +
-                      "\n     [cyan]git checkout --theirs spell-book.txt[/] (keep branch's version: 'Advanced Fire Magic')" +
-                      "\n  4. Choose either command above to resolve the conflict" +
-                      "\n  5. Stage the resolved file: [cyan]git add spell-book.txt[/]" +
-                      "\n  6. Complete the merge: [cyan]git commit --no-edit[/] (accept git's auto-generated merge message)" +
                       "\n\n[yellow]═══ Understanding Merge Conflicts ═══[/]" +
                       "\n[cyan]What is a merge conflict?[/]" +
                       "\n  • Happens when two branches modify the same line(s) of a file differently" +
@@ -125,7 +116,16 @@ public class Room09ConflictCatacombsFactory
                       "\n  • These commands are perfect for simple 'pick one version' conflicts" +
                       "\n  • For complex conflicts requiring manual merge, you'd edit the file directly" +
                       "\n  • In this game, use --ours or --theirs to resolve conflicts quickly" +
-                      "\n  • After choosing, stage with 'git add <file>' and commit",
+                      "\n  • After choosing, stage with 'git add <file>' and commit" +
+                      "\n\n[yellow]To resolve this conflict:[/]" +
+                      "\n  1. Check the status: [cyan]git status[/]" +
+                      "\n  2. View the conflict in the file: [cyan]git diff spell-book.txt[/]" +
+                      "\n  3. For simple conflicts, git provides shortcuts to choose a version:" +
+                      "\n     [cyan]git checkout --ours spell-book.txt[/]   (keep main's version: 'Elemental Fire Magic')" +
+                      "\n     [cyan]git checkout --theirs spell-book.txt[/] (keep branch's version: 'Advanced Fire Magic')" +
+                      "\n  4. Choose either command above to resolve the conflict" +
+                      "\n  5. Stage the resolved file: [cyan]git add spell-book.txt[/]" +
+                      "\n  6. Complete the merge: [cyan]git commit --no-edit[/] (accept git's auto-generated merge message)",
             challenge: challenge,
             exits: new Dictionary<string, string> { { "forward", "room-10" } },
             isStartRoom: false,

@@ -144,12 +144,6 @@ public class Room11CherryPickGardenFactory
                       "\n  • Git truncates from the beginning/prefix - not random characters!" +
                       "\n  • Git accepts short hashes in commands as long as they're unique in the repo" +
                       "\n  • Most git commands show short hashes by default (--oneline)" +
-                      "\n\n[yellow]To complete this challenge:[/]" +
-                      "\n  1. Make sure you're on main: [cyan]git branch[/] (should show * main)" +
-                      "\n  2. View the experimental branch: [cyan]git log experimental-flowers --oneline[/]" +
-                      "\n  3. Find the 'Add lavender flower' commit [yellow]hash[/] from the log" +
-                      "\n  4. Cherry-pick using the hash: [cyan]git cherry-pick <commit-hash>[/]" +
-                      "\n     (You can use the short 7-character hash from --oneline)" +
                       "\n\n[yellow]═══ Cherry-Pick Command Guide ═══[/]" +
                       "\n[cyan]git cherry-pick <commit-hash>[/] - Applies a specific commit to your current branch" +
                       "\n  • Takes ONE commit (identified by its hash) and applies it to current branch" +
@@ -160,7 +154,13 @@ public class Room11CherryPickGardenFactory
                       "\n  • You need a specific bug fix from a feature branch" +
                       "\n  • You want one commit but not the whole branch" +
                       "\n  • You need to backport a fix to an older version" +
-                      "\n\n[dim]Think of cherry-pick as copy-paste for commits - the hash tells git exactly which commit to copy![/]",
+                      "\n\n[dim]Think of cherry-pick as copy-paste for commits - the hash tells git exactly which commit to copy![/]" +
+                      "\n\n[yellow]To complete this challenge:[/]" +
+                      "\n  1. Make sure you're on main: [cyan]git branch[/] (should show * main)" +
+                      "\n  2. View the experimental branch: [cyan]git log experimental-flowers --oneline[/]" +
+                      "\n  3. Find the 'Add lavender flower' commit [yellow]hash[/] from the log" +
+                      "\n  4. Cherry-pick using the hash: [cyan]git cherry-pick <commit-hash>[/]" +
+                      "\n     (You can use the short 7-character hash from --oneline)",
             challenge: challenge,
             exits: new Dictionary<string, string> { { "forward", "room-12" } },
             isStartRoom: false,

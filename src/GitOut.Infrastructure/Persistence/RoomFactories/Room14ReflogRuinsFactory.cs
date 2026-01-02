@@ -86,12 +86,6 @@ public class Room14ReflogRuinsFactory
                       "But git remembers ALL movements of HEAD in the reflog - a safety net that tracks every change for 90 days.' " +
                       "\n\nYou notice that an important commit with discovery notes has been lost! It was reset away, but the reflog " +
                       "still remembers it. Check LOST_COMMIT_INFO.txt for clues about the lost commit." +
-                      "\n\n[yellow]To complete this challenge:[/]" +
-                      "\n  1. View the reflog: [cyan]git reflog[/]" +
-                      "\n  2. Find the commit with 'Important notes about discovery' in reflog" +
-                      "\n  3. Note its commit hash (shown on the left)" +
-                      "\n  4. Restore it: [cyan]git reset --hard <commit-hash>[/]" +
-                      "\n  5. The lost commit with notes.txt will be restored!" +
                       "\n\n[yellow]═══ Command Guide ═══[/]" +
                       "\n[cyan]git reflog[/] - Shows the history of HEAD movements" +
                       "\n  • Records every time HEAD moves (commits, checkouts, resets, etc.)" +
@@ -112,7 +106,13 @@ public class Room14ReflogRuinsFactory
                       "\n  • [cyan]git log:[/] Shows commit history (the story git tells)" +
                       "\n  • [cyan]git reflog:[/] Shows HEAD history (the story of what you did)" +
                       "\n\n[green]Remember:[/] As long as you committed it, reflog can help you find it!" +
-                      "\n\n[dim]Think of reflog as git's \"undo history\"![/]",
+                      "\n\n[dim]Think of reflog as git's \"undo history\"![/]" +
+                      "\n\n[yellow]To complete this challenge:[/]" +
+                      "\n  1. View the reflog: [cyan]git reflog[/]" +
+                      "\n  2. Find the commit with 'Important notes about discovery' in reflog" +
+                      "\n  3. Note its commit hash (shown on the left)" +
+                      "\n  4. Restore it: [cyan]git reset --hard <commit-hash>[/]" +
+                      "\n  5. The lost commit with notes.txt will be restored!",
             challenge: challenge,
             exits: new Dictionary<string, string> { { "forward", "room-15" } },
             isStartRoom: false,

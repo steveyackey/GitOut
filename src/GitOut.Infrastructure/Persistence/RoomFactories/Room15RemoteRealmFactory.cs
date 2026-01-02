@@ -86,10 +86,6 @@ public class Room15RemoteRealmFactory
                       "and collaboration, and fetch others' work.' " +
                       "\n\nA simulated remote repository has been prepared for you. The file REMOTE_PATH.txt in your working directory contains the path you'll need. " +
                       "You need to connect to it by adding it as a remote named 'origin'." +
-                      "\n\n[yellow]To complete this challenge:[/]" +
-                      "\n  1. The REMOTE_PATH.txt file contains the repository path" +
-                      "\n  2. Add the remote: [cyan]git remote add origin <path-from-REMOTE_PATH.txt>[/]" +
-                      "\n  3. Verify the remote: [cyan]git remote -v[/]" +
                       "\n\n[yellow]═══ Command Guide ═══[/]" +
                       "\n[cyan]git remote add <name> <url>[/] - Adds a new remote repository" +
                       "\n  • <name> is typically 'origin' (the default remote)" +
@@ -112,7 +108,11 @@ public class Room15RemoteRealmFactory
                       "\n  • Collaborate with team members" +
                       "\n  • Contribute to open source projects" +
                       "\n  • Access your code from anywhere" +
-                      "\n\n[dim]Think of remotes as bookmarks to other repositories![/]",
+                      "\n\n[dim]Think of remotes as bookmarks to other repositories![/]" +
+                      "\n\n[yellow]To complete this challenge:[/]" +
+                      "\n  1. The REMOTE_PATH.txt file contains the repository path" +
+                      "\n  2. Add the remote: [cyan]git remote add origin <path-from-REMOTE_PATH.txt>[/]" +
+                      "\n  3. Verify the remote: [cyan]git remote -v[/]",
             challenge: challenge,
             exits: new Dictionary<string, string> { { "forward", "room-16" } },
             isStartRoom: false,

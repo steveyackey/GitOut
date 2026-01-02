@@ -97,17 +97,6 @@ public class Room18BlameChamberFactory
             narrative: "You enter a chamber filled with ancient scrolls and magnifying glasses. Each scroll represents a line of code, " +
                       "annotated with the name of the scribe who last modified it. A master investigator greets you: " +
                       "'When bugs appear or code confuses you, git blame reveals the history of each line—who wrote it, when, and in which commit.'" +
-                      "\n\n[yellow]The Scenario:[/]" +
-                      "\n  • A bug was introduced in calculator.js" +
-                      "\n  • The function uses 'item.amount' but should use 'item.price'" +
-                      "\n  • You need to find which commit made this change" +
-                      "\n\n[yellow]Your Mission:[/]" +
-                      "\n  1. Read INVESTIGATION.txt for the full story" +
-                      "\n  2. Use [cyan]git blame calculator.js[/] to see line-by-line authorship" +
-                      "\n  3. Identify which commit modified line 3 (the one with 'reduce')" +
-                      "\n  4. Notice the commit message starts with a specific keyword" +
-                      "\n  5. Use git commands to create and commit a file named CULPRIT.txt" +
-                      "\n  6. The file should contain the keyword from the culprit's commit message" +
                       "\n\n[yellow]═══ Command Guide ═══[/]" +
                       "\n[cyan]git blame <file>[/] - Show line-by-line commit information" +
                       "\n  • Each line shows: commit hash | author | date | line number | content" +
@@ -133,7 +122,18 @@ public class Room18BlameChamberFactory
                       "\n  • Use it to learn why code was written a certain way" +
                       "\n  • Combine with git log -p to see how code evolved over time" +
                       "\n  • Some teams use 'git praise' as an alias to emphasize learning over blaming" +
-                      "\n\n[dim]Every line tells a story. Git blame helps you read it![/]",
+                      "\n\n[dim]Every line tells a story. Git blame helps you read it![/]" +
+                      "\n\n[yellow]The Scenario:[/]" +
+                      "\n  • A bug was introduced in calculator.js" +
+                      "\n  • The function uses 'item.amount' but should use 'item.price'" +
+                      "\n  • You need to find which commit made this change" +
+                      "\n\n[yellow]Your Mission:[/]" +
+                      "\n  1. Read INVESTIGATION.txt for the full story" +
+                      "\n  2. Use [cyan]git blame calculator.js[/] to see line-by-line authorship" +
+                      "\n  3. Identify which commit modified line 3 (the one with 'reduce')" +
+                      "\n  4. Notice the commit message starts with a specific keyword" +
+                      "\n  5. Use git commands to create and commit a file named CULPRIT.txt" +
+                      "\n  6. The file should contain the keyword from the culprit's commit message",
             challenge: challenge,
             exits: new Dictionary<string, string> { { "forward", "room-19" } },
             isStartRoom: false,

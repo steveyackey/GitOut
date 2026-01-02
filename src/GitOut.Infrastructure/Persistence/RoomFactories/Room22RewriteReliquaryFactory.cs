@@ -291,6 +291,16 @@ public class Room22RewriteReliquaryFactory
                       "  [dim](Add --force if not a fresh clone)[/]\n\n" +
                       "[dim](Since filter-repo requires separate installation, this game uses\n" +
                       "filter-branch to simulate the challenge. In real projects, use filter-repo!)[/]\n\n" +
+                      "[yellow]═══ For This Game (filter-branch) ═══[/]\n" +
+                      "[cyan]git filter-branch --force --index-filter \\\n" +
+                      "  'git rm --cached --ignore-unmatch secrets.txt' \\\n" +
+                      "  --prune-empty --tag-name-filter cat -- --all[/]\n\n" +
+                      "[green]═══ Prevention Tips ═══[/]\n" +
+                      "  • Use .gitignore for sensitive file patterns\n" +
+                      "  • Store secrets in environment variables\n" +
+                      "  • Use pre-commit hooks to scan for secrets\n" +
+                      "  • Always review: [cyan]git diff --cached[/] before committing\n\n" +
+                      "[dim]With great power comes great responsibility. Rewrite history wisely![/]\n\n" +
                       "[red]⚠️  CRITICAL WARNINGS:[/]\n" +
                       "  • ONLY rewrite history on local, unshared repositories\n" +
                       "  • NEVER rewrite history that others have based work on\n" +
@@ -307,17 +317,7 @@ public class Room22RewriteReliquaryFactory
                       "  3. Verify secrets in history: [cyan]git log --all -- secrets.txt[/]\n" +
                       "  4. Rewrite history using the filter-branch command from the instructions\n" +
                       "  5. Delete working copy: [cyan]rm secrets.txt[/]\n" +
-                      "  6. Verify it's gone: [cyan]git log --all --full-history -- secrets.txt[/]\n\n" +
-                      "[yellow]═══ For This Game (filter-branch) ═══[/]\n" +
-                      "[cyan]git filter-branch --force --index-filter \\\n" +
-                      "  'git rm --cached --ignore-unmatch secrets.txt' \\\n" +
-                      "  --prune-empty --tag-name-filter cat -- --all[/]\n\n" +
-                      "[green]═══ Prevention Tips ═══[/]\n" +
-                      "  • Use .gitignore for sensitive file patterns\n" +
-                      "  • Store secrets in environment variables\n" +
-                      "  • Use pre-commit hooks to scan for secrets\n" +
-                      "  • Always review: [cyan]git diff --cached[/] before committing\n\n" +
-                      "[dim]With great power comes great responsibility. Rewrite history wisely![/]",
+                      "  6. Verify it's gone: [cyan]git log --all --full-history -- secrets.txt[/]",
             challenge: challenge,
             exits: new Dictionary<string, string> { { "forward", "room-23" } },
             isStartRoom: false,

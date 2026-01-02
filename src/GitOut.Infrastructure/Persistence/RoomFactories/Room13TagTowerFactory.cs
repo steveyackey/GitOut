@@ -85,13 +85,6 @@ public class Room13TagTowerFactory
                       "versions, and other milestones. Unlike branches, tags don't move - they permanently point to a specific commit.' " +
                       "\n\nYou see three commits representing three releases: 1.0.0, 1.1.0, and 2.0.0. The tower keeper asks you to " +
                       "create tags for the major releases: v1.0.0 and v2.0.0." +
-                      "\n\n[yellow]To complete this challenge:[/]" +
-                      "\n  1. View the commit history: [cyan]git log --oneline[/]" +
-                      "\n  2. Find the commit with 'version 1.0.0' message and note its hash" +
-                      "\n  3. Tag it: [cyan]git tag v1.0.0 <commit-hash>[/]" +
-                      "\n  4. Find the commit with 'version 2.0.0' message and note its hash" +
-                      "\n  5. Tag it: [cyan]git tag v2.0.0 <commit-hash>[/]" +
-                      "\n  6. Verify your tags: [cyan]git tag[/]" +
                       "\n\n[yellow]═══ Command Guide ═══[/]" +
                       "\n[cyan]git tag <tag-name>[/] - Creates a lightweight tag at the current commit" +
                       "\n  • Simple pointer to a specific commit" +
@@ -110,7 +103,14 @@ public class Room13TagTowerFactory
                       "\n  • Semantic versioning: v1.0.0, v2.1.3, v3.0.0-beta" +
                       "\n  • Date-based: release-2024-01-15" +
                       "\n  • Milestone-based: alpha-1, beta-2, rc-1" +
-                      "\n\n[dim]Think of tags as bookmarks for important commits![/]",
+                      "\n\n[dim]Think of tags as bookmarks for important commits![/]" +
+                      "\n\n[yellow]To complete this challenge:[/]" +
+                      "\n  1. View the commit history: [cyan]git log --oneline[/]" +
+                      "\n  2. Find the commit with 'version 1.0.0' message and note its hash" +
+                      "\n  3. Tag it: [cyan]git tag v1.0.0 <commit-hash>[/]" +
+                      "\n  4. Find the commit with 'version 2.0.0' message and note its hash" +
+                      "\n  5. Tag it: [cyan]git tag v2.0.0 <commit-hash>[/]" +
+                      "\n  6. Verify your tags: [cyan]git tag[/]",
             challenge: challenge,
             exits: new Dictionary<string, string> { { "forward", "room-14" } },
             isStartRoom: false,

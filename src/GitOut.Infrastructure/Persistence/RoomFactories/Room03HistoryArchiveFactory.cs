@@ -72,13 +72,13 @@ public class Room03HistoryArchiveFactory
                       "each one glowing with an ethereal light. They float gently in the air, arranged in chronological order. " +
                       "An inscription on the floor reads: 'Every action leaves a mark. Every commit tells a story. " +
                       "To proceed, you must witness the chronicles of this repository.' " +
-                      "\n\nUse [cyan]git log[/] to view the commit history and understand what has transpired here." +
                       "\n\n[yellow]═══ Command Guide ═══[/]" +
                       "\n[cyan]git log[/] - Shows the history of all commits in the repository" +
                       "\n  • Displays commits in reverse chronological order (newest first)" +
                       "\n  • Shows commit hash, author, date, and message for each commit" +
                       "\n  • Use arrow keys to scroll, press 'q' to quit" +
-                      "\n  • Useful flags: --oneline (compact view), --graph (visual tree)",
+                      "\n  • Useful flags: --oneline (compact view), --graph (visual tree)" +
+                      "\n\nRun [cyan]git log[/] to view the commit history and understand what has transpired here.",
             challenge: challenge,
             exits: new Dictionary<string, string> { { "forward", "room-4" } },
             isStartRoom: false,

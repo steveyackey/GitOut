@@ -75,13 +75,6 @@ public class Room05BranchJunctionFactory
                       "Branches allow you to explore new ideas safely, without disturbing the main timeline. " +
                       "Create a branch called \"feature-branch\" AND step into that timeline to prove you understand this fundamental concept.' " +
                       "\n\nBranches let you work on new features, experiments, or bug fixes in isolation." +
-                      "\n\n[yellow]To complete this challenge:[/]" +
-                      "\n  [green]Option 1 - Two-step approach:[/]" +
-                      "\n    1. Create a new branch: [cyan]git branch feature-branch[/]" +
-                      "\n    2. Switch to the branch: [cyan]git switch feature-branch[/]" +
-                      "\n\n  [green]Option 2 - One-step approach (recommended):[/]" +
-                      "\n    • Create AND switch at once: [cyan]git checkout -b feature-branch[/]" +
-                      "\n      (or use modern syntax: [cyan]git switch -c feature-branch[/])" +
                       "\n\n[yellow]═══ Command Guide ═══[/]" +
                       "\n[cyan]git branch <name>[/] - Creates a new branch (but doesn't switch to it)" +
                       "\n  • A branch is a separate line of development" +
@@ -97,7 +90,14 @@ public class Room05BranchJunctionFactory
                       "\n  • [green]Recommended:[/] Most efficient way to create and start using a branch" +
                       "\n  • Combines 'git branch' and 'git checkout' into one command" +
                       "\n  • Still widely used and perfectly valid" +
-                      "\n  • Modern equivalent: 'git switch -c <name>'",
+                      "\n  • Modern equivalent: 'git switch -c <name>'" +
+                      "\n\n[yellow]To complete this challenge:[/]" +
+                      "\n  [green]Option 1 - Two-step approach:[/]" +
+                      "\n    1. Create a new branch: [cyan]git branch feature-branch[/]" +
+                      "\n    2. Switch to the branch: [cyan]git switch feature-branch[/]" +
+                      "\n\n  [green]Option 2 - One-step approach (recommended):[/]" +
+                      "\n    • Create AND switch at once: [cyan]git checkout -b feature-branch[/]" +
+                      "\n      (or use modern syntax: [cyan]git switch -c feature-branch[/])",
             challenge: challenge,
             exits: new Dictionary<string, string> { { "forward", "room-6" } },
             isStartRoom: false,

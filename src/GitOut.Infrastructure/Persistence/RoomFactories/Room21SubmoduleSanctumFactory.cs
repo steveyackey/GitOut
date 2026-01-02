@@ -175,24 +175,6 @@ public class Room21SubmoduleSanctumFactory
                       "\n\nBefore you lies a powerful magic library that many projects use. Instead of copying its code (which " +
                       "becomes outdated), you'll link to it as a submodule. The library lives in its own repository with its own " +
                       "commits, but your project will track a specific version of it." +
-                      "\n\n[yellow]The Challenge:[/]" +
-                      "\n  • Add the magic-library as a submodule in a directory called 'lib'" +
-                      "\n  • The library path is provided in SUBMODULE_INSTRUCTIONS.txt" +
-                      "\n  • Commit the submodule addition to your repository" +
-                      "\n\n[yellow]Steps to Complete:[/]" +
-                      "\n  1. Read the instructions: [cyan]cat SUBMODULE_INSTRUCTIONS.txt[/]" +
-                      "\n     (On Windows: [cyan]type SUBMODULE_INSTRUCTIONS.txt[/])" +
-                      "\n  2. Add the submodule (use exact command from SUBMODULE_INSTRUCTIONS.txt):" +
-                      "\n     [cyan]git -c protocol.file.allow=always submodule add <path> lib[/]" +
-                      "\n     (The -c flag is needed for local file:// protocol)" +
-                      "\n  3. Check what changed: [cyan]git status[/]" +
-                      "\n     You'll see .gitmodules and lib/ were added" +
-                      "\n  4. Examine .gitmodules: [cyan]cat .gitmodules[/]" +
-                      "\n     (On Windows: [cyan]type .gitmodules[/])" +
-                      "\n  5. Stage the changes: [cyan]git add .gitmodules lib[/]" +
-                      "\n  6. Commit: [cyan]git commit -m \"Add magic library as submodule\"[/]" +
-                      "\n  7. Explore the lib directory: [cyan]ls lib/[/]" +
-                      "\n     (On Windows: [cyan]dir lib[/])" +
                       "\n\n[yellow]═══ Command Guide ═══[/]" +
                       "\n[cyan]git submodule add <url> <path>[/] - Add a repository as a submodule" +
                       "\n  • <url> can be a remote URL or local path" +
@@ -242,7 +224,25 @@ public class Room21SubmoduleSanctumFactory
                       "\n  • Set git config submodule.recurse true for automatic updates" +
                       "\n  • Consider alternatives for dependencies: package managers, git subtree" +
                       "\n  • Document submodule setup in your README" +
-                      "\n\n[dim]Submodules: repositories within repositories, history within history![/]",
+                      "\n\n[dim]Submodules: repositories within repositories, history within history![/]" +
+                      "\n\n[yellow]The Challenge:[/]" +
+                      "\n  • Add the magic-library as a submodule in a directory called 'lib'" +
+                      "\n  • The library path is provided in SUBMODULE_INSTRUCTIONS.txt" +
+                      "\n  • Commit the submodule addition to your repository" +
+                      "\n\n[yellow]Steps to Complete:[/]" +
+                      "\n  1. Read the instructions: [cyan]cat SUBMODULE_INSTRUCTIONS.txt[/]" +
+                      "\n     (On Windows: [cyan]type SUBMODULE_INSTRUCTIONS.txt[/])" +
+                      "\n  2. Add the submodule (use exact command from SUBMODULE_INSTRUCTIONS.txt):" +
+                      "\n     [cyan]git -c protocol.file.allow=always submodule add <path> lib[/]" +
+                      "\n     (The -c flag is needed for local file:// protocol)" +
+                      "\n  3. Check what changed: [cyan]git status[/]" +
+                      "\n     You'll see .gitmodules and lib/ were added" +
+                      "\n  4. Examine .gitmodules: [cyan]cat .gitmodules[/]" +
+                      "\n     (On Windows: [cyan]type .gitmodules[/])" +
+                      "\n  5. Stage the changes: [cyan]git add .gitmodules lib[/]" +
+                      "\n  6. Commit: [cyan]git commit -m \"Add magic library as submodule\"[/]" +
+                      "\n  7. Explore the lib directory: [cyan]ls lib/[/]" +
+                      "\n     (On Windows: [cyan]dir lib[/])",
             challenge: challenge,
             exits: new Dictionary<string, string> { { "forward", "room-22" } },
             isStartRoom: false,

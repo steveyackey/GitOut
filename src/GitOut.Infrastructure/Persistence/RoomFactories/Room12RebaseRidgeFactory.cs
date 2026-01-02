@@ -97,11 +97,6 @@ public class Room12RebaseRidgeFactory
                       "\n\nA time-weaver appears: 'Merge would combine these timelines with a merge commit, but rebase can do something " +
                       "more elegant - it can replay your feature work as if it was built on the latest main from the start!' " +
                       "\n\nYou are currently on the feature-timeline branch. This branch needs to be updated with the latest changes from main." +
-                      "\n\n[yellow]To complete this challenge:[/]" +
-                      "\n  1. View your current commits: [cyan]git log --oneline[/]" +
-                      "\n  2. View main's commits: [cyan]git log main --oneline[/]" +
-                      "\n  3. Rebase onto main: [cyan]git rebase main[/]" +
-                      "\n  4. View the new history: [cyan]git log --oneline[/]" +
                       "\n\n[yellow]═══ Command Guide ═══[/]" +
                       "\n[cyan]git rebase <branch>[/] - Replays your current branch's commits on top of another branch" +
                       "\n  • Takes your commits and replays them on a new base" +
@@ -119,7 +114,12 @@ public class Room12RebaseRidgeFactory
                       "\n  • Creating a linear project history" +
                       "\n  • When working on local commits only (not pushed yet)" +
                       "\n\n[red]Golden Rule:[/] Never rebase public/shared commits - only rebase your local unpushed work!" +
-                      "\n\n[dim]Think of rebase as \"change the base of my branch\"![/]",
+                      "\n\n[dim]Think of rebase as \"change the base of my branch\"![/]" +
+                      "\n\n[yellow]To complete this challenge:[/]" +
+                      "\n  1. View your current commits: [cyan]git log --oneline[/]" +
+                      "\n  2. View main's commits: [cyan]git log main --oneline[/]" +
+                      "\n  3. Rebase onto main: [cyan]git rebase main[/]" +
+                      "\n  4. View the new history: [cyan]git log --oneline[/]",
             challenge: challenge,
             exits: new Dictionary<string, string> { { "forward", "room-13" } },
             isStartRoom: false,

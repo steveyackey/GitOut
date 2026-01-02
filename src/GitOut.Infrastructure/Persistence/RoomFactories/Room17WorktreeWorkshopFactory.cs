@@ -113,14 +113,6 @@ public class Room17WorktreeWorkshopFactory
                       "Git worktrees let you check out multiple branches simultaneously in separate directories!'" +
                       "\n\n'Each worktree is like having a separate workspace for a different branch, but they all share " +
                       "the same repository history. No need to stash, switch branches, or clone the repo multiple times.'" +
-                      "\n\n[yellow]The Challenge:[/]" +
-                      "\n  • Create an additional worktree in a parallel directory" +
-                      "\n  • The worktree should check out a new or existing branch" +
-                      "\n  • Both the main directory and the new worktree will coexist" +
-                      "\n\n[yellow]Your Mission:[/]" +
-                      "\n  1. Read WORKTREE_GUIDE.txt for detailed instructions" +
-                      "\n  2. Use [cyan]git worktree add <path> <branch>[/] to create a new worktree" +
-                      "\n  3. Verify with [cyan]git worktree list[/] that you have 2+ worktrees" +
                       "\n\n[yellow]═══ Command Guide ═══[/]" +
                       "\n[cyan]git worktree add <path> <branch>[/] - Create new worktree" +
                       "\n  • <path>: Directory for the new worktree (can be relative like ../feature)" +
@@ -154,7 +146,15 @@ public class Room17WorktreeWorkshopFactory
                       "\n  • You cannot check out the same branch in multiple worktrees" +
                       "\n  • Commits made in any worktree affect the shared repository history" +
                       "\n  • Use 'git worktree list' to see which branches are checked out where" +
-                      "\n\n[dim]Multiple workspaces, one repository. Work smarter, not harder![/]",
+                      "\n\n[dim]Multiple workspaces, one repository. Work smarter, not harder![/]" +
+                      "\n\n[yellow]The Challenge:[/]" +
+                      "\n  • Create an additional worktree in a parallel directory" +
+                      "\n  • The worktree should check out a new or existing branch" +
+                      "\n  • Both the main directory and the new worktree will coexist" +
+                      "\n\n[yellow]Your Mission:[/]" +
+                      "\n  1. Read WORKTREE_GUIDE.txt for detailed instructions" +
+                      "\n  2. Use [cyan]git worktree add <path> <branch>[/] to create a new worktree" +
+                      "\n  3. Verify with [cyan]git worktree list[/] that you have 2+ worktrees",
             challenge: challenge,
             exits: new Dictionary<string, string> { { "forward", "room-18" } },
             isStartRoom: false,

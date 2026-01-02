@@ -89,16 +89,6 @@ public class Room16BisectBattlefieldFactory
                       "through history to find the exact commit that introduced it. Instead of checking every commit, it uses divide-and-conquer!' " +
                       "\n\nThere are 11 commits in this repository. Commit 1 was good, the current commit is bad. Your mission: find which commit " +
                       "introduced the bug." +
-                      "\n\n[yellow]To complete this challenge:[/]" +
-                      "\n  1. A bug exists in code.txt - one version says 'BUGGED' instead of 'OK'" +
-                      "\n  2. Start bisecting: [cyan]git bisect start[/]" +
-                      "\n  3. Mark current as bad: [cyan]git bisect bad[/]" +
-                      "\n  4. Mark old commit as good: [cyan]git bisect good HEAD~9[/]" +
-                      "\n  5. Git checks out a commit - view the file: [cyan]git show HEAD:code.txt[/]" +
-                      "\n  6. If it says BUGGED, mark bad: [cyan]git bisect bad[/], else: [cyan]git bisect good[/]" +
-                      "\n  7. Repeat until git identifies the first bad commit (it's Version 6)" +
-                      "\n  8. Note the version number and reset: [cyan]git bisect reset[/]" +
-                      "\n  9. Use 'git' commands to create and commit a file named FOUND_BUG.txt containing 'Version 6'" +
                       "\n\n[yellow]═══ Command Guide ═══[/]" +
                       "\n[cyan]git bisect start[/] - Begins a bisect session" +
                       "\n  • Puts git into bisect mode" +
@@ -123,7 +113,17 @@ public class Room16BisectBattlefieldFactory
                       "\n  • Script exits 0 for good, 1-127 (except 125) for bad" +
                       "\n  • Extremely powerful for regressions with automated tests" +
                       "\n\n[green]Pro tip:[/] Bisect is most powerful when you have good automated tests!" +
-                      "\n\n[dim]Think of bisect as binary search through git history![/]",
+                      "\n\n[dim]Think of bisect as binary search through git history![/]" +
+                      "\n\n[yellow]To complete this challenge:[/]" +
+                      "\n  1. A bug exists in code.txt - one version says 'BUGGED' instead of 'OK'" +
+                      "\n  2. Start bisecting: [cyan]git bisect start[/]" +
+                      "\n  3. Mark current as bad: [cyan]git bisect bad[/]" +
+                      "\n  4. Mark old commit as good: [cyan]git bisect good HEAD~9[/]" +
+                      "\n  5. Git checks out a commit - view the file: [cyan]git show HEAD:code.txt[/]" +
+                      "\n  6. If it says BUGGED, mark bad: [cyan]git bisect bad[/], else: [cyan]git bisect good[/]" +
+                      "\n  7. Repeat until git identifies the first bad commit (it's Version 6)" +
+                      "\n  8. Note the version number and reset: [cyan]git bisect reset[/]" +
+                      "\n  9. Use 'git' commands to create and commit a file named FOUND_BUG.txt containing 'Version 6'",
             challenge: challenge,
             exits: new Dictionary<string, string> { { "forward", "room-17" } },
             isStartRoom: false,
