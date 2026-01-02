@@ -37,8 +37,8 @@ public class Room12RebaseRidgeFactory
 
                 // Create feature branch
                 await gitExec.ExecuteAsync("checkout -b feature-timeline", workingDir);
-                await File.WriteAllTextAsync(Path.Combine(workingDir, "timeline.txt"), "Event 1: Beginning\nEvent 2: Feature work");
-                await gitExec.ExecuteAsync("add timeline.txt", workingDir);
+                await File.WriteAllTextAsync(Path.Combine(workingDir, "feature.txt"), "Event 2: Feature work");
+                await gitExec.ExecuteAsync("add feature.txt", workingDir);
                 await gitExec.ExecuteAsync("commit -m \"Event 2 on feature\"", workingDir);
 
                 // Go back to main and add more commits
@@ -93,7 +93,7 @@ public class Room12RebaseRidgeFactory
             name: "The Rebase Ridge",
             description: "A ridge where timelines can be realigned",
             narrative: "You stand atop a ridge overlooking two diverging paths through time. The main timeline has progressed " +
-                      "with new events (Event A and Event B), while your feature-timeline branched off earlier and added Event 2. " +
+                      "with new events (Event A and Event B in timeline.txt), while your feature-timeline branched off earlier and added Event 2 (in feature.txt). " +
                       "\n\nA time-weaver appears: 'Merge would combine these timelines with a merge commit, but rebase can do something " +
                       "more elegant - it can replay your feature work as if it was built on the latest main from the start!' " +
                       "\n\nYou are currently on the feature-timeline branch. This branch needs to be updated with the latest changes from main." +
@@ -118,8 +118,7 @@ public class Room12RebaseRidgeFactory
                       "\n\n[yellow]To complete this challenge:[/]" +
                       "\n  1. View your current commits: [cyan]git log --oneline[/]" +
                       "\n  2. View main's commits: [cyan]git log main --oneline[/]" +
-                      "\n  3. Rebase onto main: [cyan]git rebase main[/]" +
-                      "\n  4. View the new history: [cyan]git log --oneline[/]",
+                      "\n  3. Rebase onto main: [cyan]git rebase main[/]",
             challenge: challenge,
             exits: new Dictionary<string, string> { { "forward", "room-13" } },
             isStartRoom: false,

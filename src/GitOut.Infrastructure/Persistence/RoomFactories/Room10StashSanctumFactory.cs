@@ -103,8 +103,7 @@ public class Room10StashSanctumFactory
                       "\n\n[yellow]To complete this challenge:[/]" +
                       "\n  1. Check your current changes: [cyan]git status[/]" +
                       "\n  2. View the diff: [cyan]git diff[/]" +
-                      "\n  3. Stash your work INCLUDING untracked files: [cyan]git stash -u[/]" +
-                      "\n  4. Verify working directory is clean: [cyan]git status[/]",
+                      "\n  3. Stash your work INCLUDING untracked files: [cyan]git stash -u[/]",
             challenge: challenge,
             exits: new Dictionary<string, string> { { "forward", "room-11" } },
             isStartRoom: false,
