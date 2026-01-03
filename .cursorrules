@@ -1,0 +1,18 @@
+Read and follow the instructions in CLAUDE.md for comprehensive project context including:
+- Clean Architecture layer boundaries and dependency rules
+- Git command execution strategy and challenge system
+- Room factory pattern and how to add new rooms
+- Testing patterns (unit, integration, E2E)
+- Save/load system architecture
+- Conventional commit message format
+
+Key rules:
+- Domain layer has ZERO external dependencies
+- Application layer imports only Domain
+- Infrastructure implements interfaces from Domain/Application
+- Use factory pattern for new rooms in src/GitOut.Infrastructure/Persistence/RoomFactories/
+- All git commands execute via IGitCommandExecutor for testability
+- Challenges get isolated temp directories via TempDirectoryManager
+- Room instructions should ONLY use git commands, not shell commands like cat, type, ls, dir, etc.
+  Use git show, git log, git diff, etc. to view file contents instead
+

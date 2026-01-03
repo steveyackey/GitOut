@@ -4,11 +4,11 @@ using GitOut.Domain.Interfaces;
 
 namespace GitOut.Infrastructure.Persistence.RoomFactories;
 
-public class Room20InteractiveStagingHallFactory
+public class Room21InteractiveStagingHallFactory
 {
     private readonly IGitCommandExecutor _gitExecutor;
 
-    public Room20InteractiveStagingHallFactory(IGitCommandExecutor gitExecutor)
+    public Room21InteractiveStagingHallFactory(IGitCommandExecutor gitExecutor)
     {
         _gitExecutor = gitExecutor ?? throw new ArgumentNullException(nameof(gitExecutor));
     }
@@ -155,7 +155,7 @@ function subtract(a, b) {
         );
 
         var room = new Room(
-            id: "room-20",
+            id: "room-21",
             name: "The Interactive Staging Hall",
             description: "A grand hall of mirrors, each reflecting a different change to your code",
             narrative: "You step into an immense hall lined with mirrors. Each mirror shows a different change you've made to your code. " +
@@ -210,7 +210,7 @@ function subtract(a, b) {
                       "\n  8. Commit: [cyan]git commit -m 'Add validation to greet'[/]" +
                       "\n  9. Confirm unstaged changes remain: [cyan]git status[/]",
             challenge: challenge,
-            exits: new Dictionary<string, string> { { "forward", "room-21" } },
+            exits: new Dictionary<string, string> { { "forward", "room-22" } },
             isStartRoom: false,
             isEndRoom: false
         );
@@ -218,3 +218,4 @@ function subtract(a, b) {
         return Task.FromResult(room);
     }
 }
+

@@ -4,11 +4,11 @@ using GitOut.Domain.Interfaces;
 
 namespace GitOut.Infrastructure.Persistence.RoomFactories;
 
-public class Room18BlameChamberFactory
+public class Room19BlameChamberFactory
 {
     private readonly IGitCommandExecutor _gitExecutor;
 
-    public Room18BlameChamberFactory(IGitCommandExecutor gitExecutor)
+    public Room19BlameChamberFactory(IGitCommandExecutor gitExecutor)
     {
         _gitExecutor = gitExecutor ?? throw new ArgumentNullException(nameof(gitExecutor));
     }
@@ -91,7 +91,7 @@ public class Room18BlameChamberFactory
         );
 
         var room = new Room(
-            id: "room-18",
+            id: "room-19",
             name: "The Blame Chamber",
             description: "A forensic lab where code history is investigated line by line",
             narrative: "You enter a chamber filled with ancient scrolls and magnifying glasses. Each scroll represents a line of code, " +
@@ -135,7 +135,7 @@ public class Room18BlameChamberFactory
                       "\n  5. Use git commands to create and commit a file named CULPRIT.txt" +
                       "\n  6. The file should contain the keyword from the culprit's commit message",
             challenge: challenge,
-            exits: new Dictionary<string, string> { { "forward", "room-19" } },
+            exits: new Dictionary<string, string> { { "forward", "room-20" } },
             isStartRoom: false,
             isEndRoom: false
         );
@@ -143,3 +143,4 @@ public class Room18BlameChamberFactory
         return Task.FromResult(room);
     }
 }
+

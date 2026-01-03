@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 GitOut is a terminal-based dungeon crawler that teaches git commands through gameplay. Players navigate rooms, encounter challenges, and use **real git commands** to progress. The project is built with .NET 10, C# 14, and Spectre.Console for TUI, following clean architecture principles.
 
-**Current Status**: Phase 4 complete (23 playable rooms, all 3 challenge types, save/load system fully integrated, factory-based room architecture). Covers basic through expert git concepts including init, add, commit, log, status, branch, merge, restore, conflict resolution, stash, cherry-pick, rebase, tag, reflog, remote repos, bisect, worktree, blame, hooks, interactive staging, submodule, filter-branch, and a comprehensive final boss challenge.
+**Current Status**: Phase 4 complete (24 playable rooms, all 3 challenge types, save/load system fully integrated, factory-based room architecture). Covers basic through expert git concepts including init, add, commit, log, status, branch, merge, restore, conflict resolution, stash, cherry-pick, rebase, tag, reflog, remote repos, bisect, revert, worktree, blame, hooks, interactive staging, submodule, filter-branch, and a comprehensive final boss challenge.
 
 ## Essential Commands
 
@@ -400,10 +400,11 @@ public async Task CompleteGame_ShouldProgressThroughFirstTwoRooms()
 - 159 tests passing
 
 ### Phase 4 (Complete)
-- 23 rooms total (7 new rooms added)
-- Advanced git workflows: worktree (Room 17), blame (Room 18), hooks (Room 19)
-- Advanced techniques: interactive staging (Room 20), submodule (Room 21), filter-branch (Room 22)
-- Epic final boss challenge (Room 23) - combining all git concepts learned
+- 24 rooms total (8 new rooms added)
+- Safe undo: revert (Room 17) - safely undo pushed commits
+- Advanced git workflows: worktree (Room 18), blame (Room 19), hooks (Room 20)
+- Advanced techniques: interactive staging (Room 21), submodule (Room 22), filter-branch (Room 23)
+- Epic final boss challenge (Room 24) - combining all git concepts learned
 - Save/load system fully integrated and tested
 - Cross-platform compatibility (Windows/Unix/Mac)
 - 184 tests passing (61 Domain + 123 Infrastructure)
@@ -442,6 +443,7 @@ When extending validation:
 4. **Don't assume git output format**: It can vary slightly across versions
 5. **Don't create stateful challenges**: Each challenge should be re-creatable from JSON
 6. **Don't test private methods**: Test through public APIs and integration tests
+7. **Don't use shell commands in room instructions**: Only git commands are supported (no cat, type, ls, dir, etc.). Use `git show HEAD:file` to view file contents, `git diff` to see changes
 
 ## Development Workflow Tips
 
@@ -459,7 +461,7 @@ When extending validation:
 - `src/GitOut.Console/Program.cs` - DI setup and game loop
 - `src/GitOut.Infrastructure/Persistence/RoomRepository.cs` - Room loading coordinator (~95 lines)
 - `src/GitOut.Infrastructure/Persistence/RoomFactories/Room01InitializationChamberFactory.cs` - Example factory pattern
-- `src/GitOut.Infrastructure/Persistence/RoomFactories/Room23FinalGauntletFactory.cs` - Epic boss challenge example
+- `src/GitOut.Infrastructure/Persistence/RoomFactories/Room24FinalGauntletFactory.cs` - Epic boss challenge example
 - `tests/GitOut.Infrastructure.Tests/Integration/EndToEndGameTests.cs` - E2E examples
 - `tests/GitOut.Infrastructure.Tests/Integration/Phase4RoomsTests.cs` - Phase 4 room tests
 
@@ -487,13 +489,14 @@ src/GitOut.Infrastructure/Persistence/
     ├── Room14ReflogRuinsFactory.cs                     # git reflog
     ├── Room15RemoteRealmFactory.cs                     # remote repos
     ├── Room16BisectBattlefieldFactory.cs               # git bisect
-    ├── Room17WorktreeWorkshopFactory.cs                # git worktree
-    ├── Room18BlameChamberFactory.cs                    # git blame
-    ├── Room19HookHollowFactory.cs                      # git hooks
-    ├── Room20InteractiveStagingHallFactory.cs          # git add -p
-    ├── Room21SubmoduleSanctumFactory.cs                # git submodule
-    ├── Room22RewriteReliquaryFactory.cs                # git filter-branch
-    └── Room23FinalGauntletFactory.cs                   # FINAL BOSS CHALLENGE
+    ├── Room17RevertChamberFactory.cs                   # git revert
+    ├── Room18WorktreeWorkshopFactory.cs                # git worktree
+    ├── Room19BlameChamberFactory.cs                    # git blame
+    ├── Room20HookHollowFactory.cs                      # git hooks
+    ├── Room21InteractiveStagingHallFactory.cs          # git add -p
+    ├── Room22SubmoduleSanctumFactory.cs                # git submodule
+    ├── Room23RewriteReliquaryFactory.cs                # git filter-branch
+    └── Room24FinalGauntletFactory.cs                   # FINAL BOSS CHALLENGE
 ```
 
 ### Factory Pattern Example
@@ -578,7 +581,7 @@ public async Task<Dictionary<string, Room>> LoadRoomsAsync()
 - Clean git diffs focused on one room
 - No merge conflicts - different files
 - Better IDE navigation and searchability
-- Room 23 (Final Boss) is largest at ~550 lines due to complex multi-step validation
+- Room 24 (Final Boss) is largest at ~550 lines due to complex multi-step validation
 
 ## Commit Message Convention
 

@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 
 namespace GitOut.Infrastructure.Persistence.RoomFactories;
 
-public class Room19HookHollowFactory
+public class Room20HookHollowFactory
 {
     private readonly IGitCommandExecutor _gitExecutor;
 
-    public Room19HookHollowFactory(IGitCommandExecutor gitExecutor)
+    public Room20HookHollowFactory(IGitCommandExecutor gitExecutor)
     {
         _gitExecutor = gitExecutor ?? throw new ArgumentNullException(nameof(gitExecutor));
     }
@@ -126,7 +126,7 @@ public class Room19HookHollowFactory
         );
 
         var room = new Room(
-            id: "room-19",
+            id: "room-20",
             name: "The Hook Hollow",
             description: "A chamber of automation where git hooks guard the repository",
             narrative: "You enter a hollow chamber filled with clockwork mechanisms and tripwires. " +
@@ -174,7 +174,7 @@ public class Room19HookHollowFactory
                           : "\n  3. Make it executable with chmod +x .git/hooks/pre-commit") +
                       "\n  4. The hook will prevent commits with console.log statements",
             challenge: challenge,
-            exits: new Dictionary<string, string> { { "forward", "room-20" } },
+            exits: new Dictionary<string, string> { { "forward", "room-21" } },
             isStartRoom: false,
             isEndRoom: false
         );
@@ -182,3 +182,4 @@ public class Room19HookHollowFactory
         return Task.FromResult(room);
     }
 }
+

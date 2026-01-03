@@ -4,11 +4,11 @@ using GitOut.Domain.Interfaces;
 
 namespace GitOut.Infrastructure.Persistence.RoomFactories;
 
-public class Room17WorktreeWorkshopFactory
+public class Room18WorktreeWorkshopFactory
 {
     private readonly IGitCommandExecutor _gitExecutor;
 
-    public Room17WorktreeWorkshopFactory(IGitCommandExecutor gitExecutor)
+    public Room18WorktreeWorkshopFactory(IGitCommandExecutor gitExecutor)
     {
         _gitExecutor = gitExecutor ?? throw new ArgumentNullException(nameof(gitExecutor));
     }
@@ -105,7 +105,7 @@ public class Room17WorktreeWorkshopFactory
         );
 
         var room = new Room(
-            id: "room-17",
+            id: "room-18",
             name: "The Worktree Workshop",
             description: "A workshop with multiple workbenches, each for different tasks",
             narrative: "You enter a spacious workshop filled with parallel workbenches. A master craftsman explains: " +
@@ -156,7 +156,7 @@ public class Room17WorktreeWorkshopFactory
                       "\n  2. Use [cyan]git worktree add <path> <branch>[/] to create a new worktree" +
                       "\n  3. Verify with [cyan]git worktree list[/] that you have 2+ worktrees",
             challenge: challenge,
-            exits: new Dictionary<string, string> { { "forward", "room-18" } },
+            exits: new Dictionary<string, string> { { "forward", "room-19" } },
             isStartRoom: false,
             isEndRoom: false
         );
@@ -164,3 +164,4 @@ public class Room17WorktreeWorkshopFactory
         return Task.FromResult(room);
     }
 }
+

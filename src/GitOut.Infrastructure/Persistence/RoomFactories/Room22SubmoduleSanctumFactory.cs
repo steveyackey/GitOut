@@ -4,11 +4,11 @@ using GitOut.Domain.Interfaces;
 
 namespace GitOut.Infrastructure.Persistence.RoomFactories;
 
-public class Room21SubmoduleSanctumFactory
+public class Room22SubmoduleSanctumFactory
 {
     private readonly IGitCommandExecutor _gitExecutor;
 
-    public Room21SubmoduleSanctumFactory(IGitCommandExecutor gitExecutor)
+    public Room22SubmoduleSanctumFactory(IGitCommandExecutor gitExecutor)
     {
         _gitExecutor = gitExecutor ?? throw new ArgumentNullException(nameof(gitExecutor));
     }
@@ -164,7 +164,7 @@ public class Room21SubmoduleSanctumFactory
         );
 
         var room = new Room(
-            id: "room-21",
+            id: "room-22",
             name: "The Submodule Sanctum",
             description: "A chamber within a chamber, repositories nested in infinite recursion",
             narrative: "You enter a mystical sanctum where reality folds upon itself. Through archways, you see chambers within " +
@@ -244,7 +244,7 @@ public class Room21SubmoduleSanctumFactory
                       "\n  7. Explore the lib directory: [cyan]ls lib/[/]" +
                       "\n     (On Windows: [cyan]dir lib[/])",
             challenge: challenge,
-            exits: new Dictionary<string, string> { { "forward", "room-22" } },
+            exits: new Dictionary<string, string> { { "forward", "room-23" } },
             isStartRoom: false,
             isEndRoom: false
         );
@@ -252,3 +252,4 @@ public class Room21SubmoduleSanctumFactory
         return Task.FromResult(room);
     }
 }
+

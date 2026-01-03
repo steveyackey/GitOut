@@ -4,11 +4,11 @@ using GitOut.Domain.Interfaces;
 
 namespace GitOut.Infrastructure.Persistence.RoomFactories;
 
-public class Room23FinalGauntletFactory
+public class Room24FinalGauntletFactory
 {
     private readonly IGitCommandExecutor _gitExecutor;
 
-    public Room23FinalGauntletFactory(IGitCommandExecutor gitExecutor)
+    public Room24FinalGauntletFactory(IGitCommandExecutor gitExecutor)
     {
         _gitExecutor = gitExecutor ?? throw new ArgumentNullException(nameof(gitExecutor));
     }
@@ -213,7 +213,7 @@ git tag                           List all tags
 git branch                        List all branches
 git log --oneline -n              Show recent commits
 
-This is your final test. Everything you've learned across all 23 rooms comes together here.
+This is your final test. Everything you've learned across all 24 rooms comes together here.
 Use your mastery of git to restore order to this chaos!
 
 Good luck, Git Master!
@@ -399,7 +399,7 @@ You have conquered the Final Gauntlet and demonstrated complete mastery of Git!
 
 [yellow]═══ Your Achievements ═══[/]
 
-Throughout your journey across all 23 rooms, you have mastered:
+Throughout your journey across all 24 rooms, you have mastered:
 
 [cyan]Fundamentals:[/]
   ✓ Repository initialization (git init)
@@ -414,7 +414,7 @@ Throughout your journey across all 23 rooms, you have mastered:
   ✓ Working with multiple timelines
 
 [cyan]Advanced Workflows:[/]
-  ✓ Undoing changes (git restore, git reset)
+  ✓ Undoing changes (git restore, git reset, git revert)
   ✓ Temporary storage (git stash)
   ✓ Selective commits (git cherry-pick)
   ✓ Rewriting history (git rebase)
@@ -467,7 +467,7 @@ Remember: Git is a tool of immense power, but also great responsibility.
 • Use branches to experiment fearlessly
 • When in doubt, git reflog is your safety net
 
-[bold cyan]You have completed all 23 rooms of GitOut![/]
+[bold cyan]You have completed all 24 rooms of GitOut![/]
 [bold cyan]The Git universe is now yours to command![/]
 
 [dim]May your commits be atomic, your merges conflict-free, and your deployments successful![/]
@@ -480,7 +480,7 @@ Remember: Git is a tool of immense power, but also great responsibility.
         );
 
         var room = new Room(
-            id: "room-23",
+            id: "room-24",
             name: "The Final Gauntlet",
             description: "The ultimate proving ground where all your git mastery is tested",
             narrative: @"You step into a vast chamber pulsing with raw git energy. Unlike the focused challenges
@@ -538,3 +538,4 @@ The fate of the repository - and your journey - ends here.
         return Task.FromResult(room);
     }
 }
+

@@ -4,11 +4,11 @@ using GitOut.Domain.Interfaces;
 
 namespace GitOut.Infrastructure.Persistence.RoomFactories;
 
-public class Room22RewriteReliquaryFactory
+public class Room23RewriteReliquaryFactory
 {
     private readonly IGitCommandExecutor _gitExecutor;
 
-    public Room22RewriteReliquaryFactory(IGitCommandExecutor gitExecutor)
+    public Room23RewriteReliquaryFactory(IGitCommandExecutor gitExecutor)
     {
         _gitExecutor = gitExecutor ?? throw new ArgumentNullException(nameof(gitExecutor));
     }
@@ -266,7 +266,7 @@ public class Room22RewriteReliquaryFactory
         );
 
         var room = new Room(
-            id: "room-22",
+            id: "room-23",
             name: "The Rewrite Reliquary",
             description: "A forbidden archive where history itself can be rewritten - featuring the modern git filter-repo approach",
             narrative: "You enter a dimly lit chamber filled with ancient scrolls and artifacts. At the center stands a mystical altar " +
@@ -315,7 +315,7 @@ public class Room22RewriteReliquaryFactory
                       "  5. Delete working copy: [cyan]rm secrets.txt[/]\n" +
                       "  6. Verify it's gone: [cyan]git log --all --full-history -- secrets.txt[/]",
             challenge: challenge,
-            exits: new Dictionary<string, string> { { "forward", "room-23" } },
+            exits: new Dictionary<string, string> { { "forward", "room-24" } },
             isStartRoom: false,
             isEndRoom: false
         );
@@ -323,3 +323,4 @@ public class Room22RewriteReliquaryFactory
         return Task.FromResult(room);
     }
 }
+
