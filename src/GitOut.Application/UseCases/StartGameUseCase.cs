@@ -17,6 +17,16 @@ public class StartGameUseCase
 
     public async Task<StartGameResult> ExecuteAsync(string playerName)
     {
+        return await ExecuteAsync(playerName, startingRoomId: null);
+    }
+
+    /// <summary>
+    /// Start a new game, optionally at a specific room (for testing/debugging)
+    /// </summary>
+    /// <param name="playerName">Player's name</param>
+    /// <param name="startingRoomId">Optional room ID to start at (e.g., "room-5"). If null, uses the default start room.</param>
+    public async Task<StartGameResult> ExecuteAsync(string playerName, string? startingRoomId)
+    {
         if (string.IsNullOrWhiteSpace(playerName))
         {
             playerName = "Adventurer";
@@ -34,16 +44,33 @@ public class StartGameUseCase
             );
         }
 
-        // Get the starting room
-        var startRoom = await _roomRepository.GetStartRoomAsync();
+        Room? startRoom;
 
-        if (startRoom == null)
+        // If a specific starting room was requested, use it
+        if (!string.IsNullOrWhiteSpace(startingRoomId))
         {
-            return new StartGameResult(
-                false,
-                null,
-                "No starting room found. Cannot start game."
-            );
+            if (!rooms.TryGetValue(startingRoomId, out startRoom))
+            {
+                return new StartGameResult(
+                    false,
+                    null,
+                    $"Room '{startingRoomId}' not found. Available rooms: {string.Join(", ", rooms.Keys.Order())}"
+                );
+            }
+        }
+        else
+        {
+            // Get the default starting room
+            startRoom = await _roomRepository.GetStartRoomAsync();
+
+            if (startRoom == null)
+            {
+                return new StartGameResult(
+                    false,
+                    null,
+                    "No starting room found. Cannot start game."
+                );
+            }
         }
 
         // Create player
@@ -52,10 +79,14 @@ public class StartGameUseCase
         // Create game
         var game = new Game(player, startRoom, rooms);
 
+        var message = startingRoomId != null
+            ? $"Game started at {startRoom.Name}! Welcome, {playerName}! (Debug mode: --room {startingRoomId})"
+            : $"Game started! Welcome, {playerName}!";
+
         return new StartGameResult(
             true,
             game,
-            $"Game started! Welcome, {playerName}!"
+            message
         );
     }
 }

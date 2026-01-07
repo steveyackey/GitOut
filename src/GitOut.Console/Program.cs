@@ -11,6 +11,63 @@ using GitOut.Infrastructure.Persistence;
 using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console;
 
+// Parse command line arguments
+string? startingRoomId = null;
+bool showHelp = false;
+bool listRooms = false;
+
+for (int i = 0; i < args.Length; i++)
+{
+    if (args[i] == "--room" || args[i] == "-r")
+    {
+        if (i + 1 < args.Length)
+        {
+            var roomArg = args[i + 1];
+            // Support both "5" and "room-5" formats
+            startingRoomId = roomArg.StartsWith("room-") ? roomArg : $"room-{roomArg}";
+            i++; // Skip the next argument
+        }
+        else
+        {
+            AnsiConsole.MarkupLine("[red]Error: --room requires a room number or ID[/]");
+            return;
+        }
+    }
+    else if (args[i] == "--help" || args[i] == "-h")
+    {
+        showHelp = true;
+    }
+    else if (args[i] == "--list-rooms" || args[i] == "-l")
+    {
+        listRooms = true;
+    }
+}
+
+if (showHelp)
+{
+    AnsiConsole.MarkupLine("[bold cyan]GitOut[/] - A terminal-based dungeon crawler that teaches git commands");
+    AnsiConsole.WriteLine();
+    AnsiConsole.MarkupLine("[bold]Usage:[/]");
+    AnsiConsole.MarkupLine("  gitout [options]");
+    AnsiConsole.WriteLine();
+    AnsiConsole.MarkupLine("[bold]Options:[/]");
+    AnsiConsole.MarkupLine("  [yellow]--room <number>[/], [yellow]-r <number>[/]   Start at a specific room (for testing)");
+    AnsiConsole.MarkupLine("                              Examples: --room 5, --room room-5, -r 17");
+    AnsiConsole.MarkupLine("  [yellow]--list-rooms[/], [yellow]-l[/]            List all available rooms");
+    AnsiConsole.MarkupLine("  [yellow]--help[/], [yellow]-h[/]                  Show this help message");
+    AnsiConsole.WriteLine();
+    AnsiConsole.MarkupLine("[bold]In-game commands:[/]");
+    AnsiConsole.MarkupLine("  help       Show available commands");
+    AnsiConsole.MarkupLine("  look       Examine the current room");
+    AnsiConsole.MarkupLine("  status     Show your progress");
+    AnsiConsole.MarkupLine("  forward    Move to the next room (after completing challenge)");
+    AnsiConsole.MarkupLine("  git <cmd>  Execute a git command");
+    AnsiConsole.MarkupLine("  save       Save your progress");
+    AnsiConsole.MarkupLine("  exit       Exit the game");
+    AnsiConsole.WriteLine();
+    return;
+}
+
 // Check if git is installed before anything else
 if (!IsGitInstalled())
 {
@@ -55,17 +112,51 @@ var startGameUseCase = serviceProvider.GetRequiredService<StartGameUseCase>();
 var loadProgressUseCase = serviceProvider.GetRequiredService<LoadProgressUseCase>();
 var saveProgressUseCase = serviceProvider.GetRequiredService<SaveProgressUseCase>();
 var progressRepository = serviceProvider.GetRequiredService<IProgressRepository>();
+var roomRepository = serviceProvider.GetRequiredService<IRoomRepository>();
 var renderer = serviceProvider.GetRequiredService<GameRenderer>();
 var commandHandler = serviceProvider.GetRequiredService<CommandHandler>();
 var tempDirManager = serviceProvider.GetRequiredService<TempDirectoryManager>();
+
+// Handle --list-rooms
+if (listRooms)
+{
+    var rooms = await roomRepository.LoadRoomsAsync();
+    AnsiConsole.MarkupLine("[bold cyan]Available Rooms:[/]");
+    AnsiConsole.WriteLine();
+
+    var table = new Table();
+    table.AddColumn("Room ID");
+    table.AddColumn("Name");
+    table.AddColumn("Challenge Type");
+    table.Border(TableBorder.Rounded);
+
+    foreach (var room in rooms.Values.OrderBy(r => int.Parse(r.Id.Replace("room-", ""))))
+    {
+        var challengeType = room.Challenge?.Type.ToString() ?? "None";
+        var flags = new List<string>();
+        if (room.IsStartRoom) flags.Add("[green]START[/]");
+        if (room.IsEndRoom) flags.Add("[red]END[/]");
+        var flagStr = flags.Count > 0 ? $" ({string.Join(", ", flags)})" : "";
+        table.AddRow(
+            $"[yellow]{room.Id}[/]",
+            $"{room.Name}{flagStr}",
+            challengeType
+        );
+    }
+
+    AnsiConsole.Write(table);
+    AnsiConsole.WriteLine();
+    AnsiConsole.MarkupLine("[dim]Use --room <id> to start at a specific room (e.g., --room 5 or --room room-5)[/]");
+    return;
+}
 
 try
 {
     // Render welcome screen
     renderer.RenderWelcome();
 
-    // Check if saved game exists
-    var hasSavedGame = await progressRepository.HasSavedProgressAsync();
+    // Check if saved game exists (skip if --room was specified)
+    var hasSavedGame = startingRoomId == null && await progressRepository.HasSavedProgressAsync();
     GitOut.Domain.Entities.Game? game = null;
     string? workingDirectory = null;
 
@@ -117,8 +208,8 @@ try
             playerName = "Adventurer";
         }
 
-        // Start the game
-        var startResult = await startGameUseCase.ExecuteAsync(playerName);
+        // Start the game (optionally at a specific room)
+        var startResult = await startGameUseCase.ExecuteAsync(playerName, startingRoomId);
 
         if (!startResult.Success || startResult.Game == null)
         {
@@ -127,7 +218,16 @@ try
         }
 
         game = startResult.Game;
-        AnsiConsole.MarkupLine($"[green]{startResult.Message}[/]");
+
+        // Show different message for debug mode
+        if (startingRoomId != null)
+        {
+            AnsiConsole.MarkupLine($"[yellow]{startResult.Message}[/]");
+        }
+        else
+        {
+            AnsiConsole.MarkupLine($"[green]{startResult.Message}[/]");
+        }
         AnsiConsole.WriteLine();
     }
 
