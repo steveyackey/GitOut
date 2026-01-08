@@ -10,28 +10,39 @@ namespace GitOut.Console.UI;
 /// </summary>
 public class GameRenderer
 {
+    private readonly IAnsiConsole _console;
+
+    public GameRenderer() : this(AnsiConsole.Console)
+    {
+    }
+
+    public GameRenderer(IAnsiConsole console)
+    {
+        _console = console ?? throw new ArgumentNullException(nameof(console));
+    }
+
     public void RenderWelcome(bool animate = true)
     {
-        SplashScreen.Show(animate);
+        SplashScreen.Show(_console, animate);
     }
 
     public void RenderRoom(Room room, Player player)
     {
-        AnsiConsole.WriteLine();
+        _console.WriteLine();
 
         // Room title
         var title = new Rule($"[bold cyan]{room.Name}[/]")
             .RuleStyle("cyan dim")
             .LeftJustified();
-        AnsiConsole.Write(title);
+        _console.Write(title);
 
         // Room narrative
         var narrativePanel = new Panel(new Markup($"[italic]{room.Narrative}[/]"))
             .BorderColor(Color.Grey)
             .Padding(1, 0);
-        AnsiConsole.Write(narrativePanel);
+        _console.Write(narrativePanel);
 
-        AnsiConsole.WriteLine();
+        _console.WriteLine();
 
         // Challenge info
         if (room.Challenge != null)
@@ -43,8 +54,8 @@ public class GameRenderer
         if (room.Exits.Count > 0)
         {
             var exitsText = string.Join(", ", room.Exits.Keys.Select(k => $"[cyan]{k}[/]"));
-            AnsiConsole.MarkupLine($"[dim]Exits:[/] {exitsText}");
-            AnsiConsole.WriteLine();
+            _console.MarkupLine($"[dim]Exits:[/] {exitsText}");
+            _console.WriteLine();
         }
     }
 
@@ -56,7 +67,7 @@ public class GameRenderer
                 .Header("[bold cyan]Help[/]")
                 .BorderColor(Color.Cyan1)
                 .Padding(1, 0);
-            AnsiConsole.Write(helpPanel);
+            _console.Write(helpPanel);
             return;
         }
 
@@ -66,7 +77,7 @@ public class GameRenderer
                 .Header("[bold cyan]Status[/]")
                 .BorderColor(Color.Cyan1)
                 .Padding(1, 0);
-            AnsiConsole.Write(statusPanel);
+            _console.Write(statusPanel);
             return;
         }
 
@@ -86,32 +97,32 @@ public class GameRenderer
                         {
                             // Regular git output (before the success marker)
                             var gitOutput = result.Message.Substring(0, splitIndex);
-                            AnsiConsole.MarkupLine($"[dim]{Markup.Escape(gitOutput)}[/]");
-                            AnsiConsole.WriteLine();
+                            _console.MarkupLine($"[dim]{Markup.Escape(gitOutput)}[/]");
+                            _console.WriteLine();
 
                             // Success message (from the marker onwards, remove the leading newlines)
                             var successMessage = result.Message.Substring(splitIndex + 2); // Skip the \n\n
                             var successPanel = new Panel(Markup.Escape(successMessage))
                                 .BorderColor(Color.Green)
                                 .Padding(1, 0);
-                            AnsiConsole.Write(successPanel);
+                            _console.Write(successPanel);
                         }
                         else
                         {
-                            AnsiConsole.MarkupLine($"[dim]{Markup.Escape(result.Message)}[/]");
+                            _console.MarkupLine($"[dim]{Markup.Escape(result.Message)}[/]");
                         }
                     }
                     else
                     {
-                        AnsiConsole.MarkupLine($"[dim]{Markup.Escape(result.Message)}[/]");
+                        _console.MarkupLine($"[dim]{Markup.Escape(result.Message)}[/]");
                     }
                 }
             }
             else
             {
-                AnsiConsole.MarkupLine($"[red]Error:[/] {Markup.Escape(result.Message)}");
+                _console.MarkupLine($"[red]Error:[/] {Markup.Escape(result.Message)}");
             }
-            AnsiConsole.WriteLine();
+            _console.WriteLine();
             return;
         }
 
@@ -119,14 +130,14 @@ public class GameRenderer
         {
             if (result.Success)
             {
-                AnsiConsole.Clear();
-                AnsiConsole.MarkupLine($"[green]{Markup.Escape(result.Message)}[/]");
-                AnsiConsole.WriteLine();
+                _console.Clear();
+                _console.MarkupLine($"[green]{Markup.Escape(result.Message)}[/]");
+                _console.WriteLine();
             }
             else
             {
-                AnsiConsole.MarkupLine($"[red]{Markup.Escape(result.Message)}[/]");
-                AnsiConsole.WriteLine();
+                _console.MarkupLine($"[red]{Markup.Escape(result.Message)}[/]");
+                _console.WriteLine();
             }
             return;
         }
@@ -136,8 +147,8 @@ public class GameRenderer
             var lookPanel = new Panel(Markup.Escape(result.Message))
                 .BorderColor(Color.Grey)
                 .Padding(1, 0);
-            AnsiConsole.Write(lookPanel);
-            AnsiConsole.WriteLine();
+            _console.Write(lookPanel);
+            _console.WriteLine();
             return;
         }
 
@@ -149,7 +160,7 @@ public class GameRenderer
                     .BorderColor(Color.Green)
                     .Header("[bold green]Correct![/]")
                     .Padding(1, 0);
-                AnsiConsole.Write(successPanel);
+                _console.Write(successPanel);
             }
             else
             {
@@ -157,9 +168,9 @@ public class GameRenderer
                     .BorderColor(Color.Red)
                     .Header("[bold red]Incorrect[/]")
                     .Padding(1, 0);
-                AnsiConsole.Write(errorPanel);
+                _console.Write(errorPanel);
             }
-            AnsiConsole.WriteLine();
+            _console.WriteLine();
             return;
         }
 
@@ -169,21 +180,21 @@ public class GameRenderer
                 .BorderColor(Color.Yellow)
                 .Header("[bold yellow]Hint[/]")
                 .Padding(1, 0);
-            AnsiConsole.Write(hintPanel);
-            AnsiConsole.WriteLine();
+            _console.Write(hintPanel);
+            _console.WriteLine();
             return;
         }
 
         // Default rendering
         if (result.Success)
         {
-            AnsiConsole.MarkupLine($"[green]{Markup.Escape(result.Message)}[/]");
+            _console.MarkupLine($"[green]{Markup.Escape(result.Message)}[/]");
         }
         else
         {
-            AnsiConsole.MarkupLine($"[red]{Markup.Escape(result.Message)}[/]");
+            _console.MarkupLine($"[red]{Markup.Escape(result.Message)}[/]");
         }
-        AnsiConsole.WriteLine();
+        _console.WriteLine();
     }
 
     /// <summary>
@@ -216,8 +227,8 @@ public class GameRenderer
                     .Border(TableBorder.Rounded)
                     .AddColumn(new TableColumn("Challenge").Centered())
                     .AddRow($"[{statusColor}]{statusIcon} {challenge.Description}[/]");
-                AnsiConsole.Write(challengeTable);
-                AnsiConsole.WriteLine();
+                _console.Write(challengeTable);
+                _console.WriteLine();
                 break;
         }
     }
@@ -246,8 +257,8 @@ public class GameRenderer
             table.AddRow("[dim]Use 'answer <number>' to respond (e.g., 'answer 1')[/]");
         }
 
-        AnsiConsole.Write(table);
-        AnsiConsole.WriteLine();
+        _console.Write(table);
+        _console.WriteLine();
     }
 
     private void RenderScenarioChallenge(ScenarioChallenge scenario, string statusIcon, string statusColor, bool isCompleted)
@@ -265,8 +276,8 @@ public class GameRenderer
             BorderStyle = new Style(Color.Magenta)
         };
 
-        AnsiConsole.Write(panel);
-        AnsiConsole.WriteLine();
+        _console.Write(panel);
+        _console.WriteLine();
     }
 
     private void RenderRepositoryChallenge(RepositoryChallenge repository, string statusIcon, string statusColor, bool isCompleted)
@@ -277,8 +288,8 @@ public class GameRenderer
             .AddColumn(new TableColumn("Challenge").Centered())
             .AddRow($"[{statusColor}]{statusIcon} {repository.Description}[/]");
 
-        AnsiConsole.Write(challengeTable);
-        AnsiConsole.WriteLine();
+        _console.Write(challengeTable);
+        _console.WriteLine();
     }
 
     public void RenderError(string message)
@@ -286,18 +297,18 @@ public class GameRenderer
         var errorPanel = new Panel($"[red bold]Error:[/] {Markup.Escape(message)}")
             .BorderColor(Color.Red)
             .Padding(1, 0);
-        AnsiConsole.Write(errorPanel);
-        AnsiConsole.WriteLine();
+        _console.Write(errorPanel);
+        _console.WriteLine();
     }
 
     public void RenderGameComplete(Player player)
     {
-        AnsiConsole.Clear();
+        _console.Clear();
 
         var title = new FigletText("Victory!")
             .Centered()
             .Color(Color.Green);
-        AnsiConsole.Write(title);
+        _console.Write(title);
 
         // Epic narrative epilogue
         var epilogue = new Panel(
@@ -317,8 +328,8 @@ public class GameRenderer
             BorderStyle = new Style(Color.Cyan)
         };
 
-        AnsiConsole.Write(epilogue);
-        AnsiConsole.WriteLine();
+        _console.Write(epilogue);
+        _console.WriteLine();
 
         var stats = new Table()
             .BorderColor(Color.Green)
@@ -337,22 +348,22 @@ public class GameRenderer
             .Padding(1, 1)
             .Expand();
 
-        AnsiConsole.Write(panel);
-        AnsiConsole.WriteLine();
+        _console.Write(panel);
+        _console.WriteLine();
 
-        AnsiConsole.MarkupLine("[bold yellow]Congratulations, brave adventurer! You've mastered the sacred arts of Git and escaped the dungeon![/]");
-        AnsiConsole.WriteLine();
+        _console.MarkupLine("[bold yellow]Congratulations, brave adventurer! You've mastered the sacred arts of Git and escaped the dungeon![/]");
+        _console.WriteLine();
     }
 
     public void RenderWorkingDirectory(string directory)
     {
-        AnsiConsole.MarkupLine($"[dim]Working Directory: {Markup.Escape(directory)}[/]");
-        AnsiConsole.WriteLine();
+        _console.MarkupLine($"[dim]Working Directory: {Markup.Escape(directory)}[/]");
+        _console.WriteLine();
     }
 
     public string GetPrompt()
     {
-        return AnsiConsole.Prompt(
+        return _console.Prompt(
             new TextPrompt<string>("[bold cyan]>[/] ")
                 .AllowEmpty());
     }
