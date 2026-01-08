@@ -17,27 +17,6 @@ public static class SplashScreen
         @"     ╚═════╝ ╚═╝   ╚═╝    ╚═════╝  ╚═════╝    ╚═╝   "
     };
 
-    private static readonly string[] DungeonArt = new[]
-    {
-        @"                        ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄",
-        @"                    ▄█████████████████████████▄",
-        @"                  ▄███████████████████████████████▄",
-        @"                ▄██████████▀▀▀▀▀▀▀▀▀▀▀██████████████▄",
-        @"               ████████▀                 ▀█████████████",
-        @"              ████████   ┌─────────────┐   ████████████",
-        @"             █████████   │ ╔═══════════╗│   █████████████",
-        @"            ██████████   │ ║ > git init ║│   ██████████████",
-        @"            ██████████   │ ╚═══════════╝│   ██████████████",
-        @"            ██████████   └──────┬┬──────┘   ██████████████",
-        @"             █████████          ││          █████████████",
-        @"              ████████    ╔═════╧╧═════╗    ████████████",
-        @"               ████████   ║   ENTER    ║   █████████████",
-        @"                ▀██████   ║  THE DUNGEON║   ██████████▀",
-        @"                  ▀████   ╚═════════════╝   ████████▀",
-        @"                    ▀█████████████████████████████▀",
-        @"                        ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀"
-    };
-
     private static readonly string[] TorchFrames = new[]
     {
         @"
@@ -68,49 +47,54 @@ public static class SplashScreen
 
     public static void Show(bool animate = true)
     {
-        AnsiConsole.Clear();
-        AnsiConsole.Cursor.Hide();
+        Show(AnsiConsole.Console, animate);
+    }
+
+    public static void Show(IAnsiConsole console, bool animate = true)
+    {
+        console.Clear();
+        console.Cursor.Hide();
 
         try
         {
             if (animate)
             {
-                ShowAnimatedIntro();
+                ShowAnimatedIntro(console);
             }
 
-            RenderMainScreen();
+            RenderMainScreen(console);
         }
         finally
         {
-            AnsiConsole.Cursor.Show();
+            console.Cursor.Show();
         }
     }
 
-    private static void ShowAnimatedIntro()
+    private static void ShowAnimatedIntro(IAnsiConsole console)
     {
         // Fade in effect with the logo
         var colors = new[] { Color.Grey19, Color.Grey30, Color.Grey42, Color.Grey54, Color.Cyan1 };
 
         foreach (var color in colors)
         {
-            AnsiConsole.Clear();
-            RenderLogo(color);
+            console.Clear();
+            RenderLogo(console, color);
             Thread.Sleep(100);
         }
 
         // Show subtitle with typing effect
-        AnsiConsole.WriteLine();
-        AnsiConsole.WriteLine();
+        console.WriteLine();
+        console.WriteLine();
 
         var subtitle = "A Dungeon Crawler That Teaches Git";
-        AnsiConsole.Cursor.MoveLeft(AnsiConsole.Console.Profile.Width);
+        console.Cursor.MoveLeft(console.Profile.Width);
 
-        var padding = (AnsiConsole.Console.Profile.Width - subtitle.Length) / 2;
-        AnsiConsole.Write(new string(' ', Math.Max(0, padding)));
+        var padding = (console.Profile.Width - subtitle.Length) / 2;
+        console.Write(new string(' ', Math.Max(0, padding)));
 
         foreach (var c in subtitle)
         {
-            AnsiConsole.Markup($"[bold yellow]{c}[/]");
+            console.Markup($"[bold yellow]{c}[/]");
             Thread.Sleep(30);
         }
 
@@ -119,30 +103,30 @@ public static class SplashScreen
         // Animate torch flicker briefly
         for (int i = 0; i < 6; i++)
         {
-            RenderTorches(i % TorchFrames.Length);
+            RenderTorches(console, i % TorchFrames.Length);
             Thread.Sleep(150);
         }
     }
 
-    private static void RenderLogo(Color color)
+    private static void RenderLogo(IAnsiConsole console, Color color)
     {
         var logoWidth = DungeonLogo[0].Length;
-        var consoleWidth = AnsiConsole.Console.Profile.Width;
+        var consoleWidth = console.Profile.Width;
         var padding = Math.Max(0, (consoleWidth - logoWidth) / 2);
 
-        AnsiConsole.WriteLine();
-        AnsiConsole.WriteLine();
+        console.WriteLine();
+        console.WriteLine();
 
         foreach (var line in DungeonLogo)
         {
-            AnsiConsole.Write(new string(' ', padding));
-            AnsiConsole.MarkupLine($"[{color.ToMarkup()}]{Markup.Escape(line)}[/]");
+            console.Write(new string(' ', padding));
+            console.MarkupLine($"[{color.ToMarkup()}]{Markup.Escape(line)}[/]");
         }
     }
 
-    private static void RenderTorches(int frame)
+    private static void RenderTorches(IAnsiConsole console, int frame)
     {
-        var consoleWidth = AnsiConsole.Console.Profile.Width;
+        var consoleWidth = console.Profile.Width;
 
         // Left torch
         var leftX = Math.Max(5, consoleWidth / 6);
@@ -151,34 +135,34 @@ public static class SplashScreen
         var torchLines = TorchFrames[frame].Split('\n');
 
         var currentRow = 10;
-        AnsiConsole.Cursor.SetPosition(0, currentRow);
+        console.Cursor.SetPosition(0, currentRow);
 
         foreach (var line in torchLines)
         {
-            AnsiConsole.Cursor.SetPosition(leftX, currentRow);
-            AnsiConsole.Markup($"[yellow]{Markup.Escape(line)}[/]");
+            console.Cursor.SetPosition(leftX, currentRow);
+            console.Markup($"[yellow]{Markup.Escape(line)}[/]");
 
-            AnsiConsole.Cursor.SetPosition(rightX, currentRow);
-            AnsiConsole.MarkupLine($"[yellow]{Markup.Escape(line)}[/]");
+            console.Cursor.SetPosition(rightX, currentRow);
+            console.MarkupLine($"[yellow]{Markup.Escape(line)}[/]");
             currentRow++;
         }
     }
 
-    private static void RenderMainScreen()
+    private static void RenderMainScreen(IAnsiConsole console)
     {
-        AnsiConsole.Clear();
+        console.Clear();
 
         // Top border
-        var width = Math.Min(80, AnsiConsole.Console.Profile.Width - 4);
+        var width = Math.Min(80, console.Profile.Width - 4);
         var borderTop = "╔" + new string('═', width - 2) + "╗";
         var borderBot = "╚" + new string('═', width - 2) + "╝";
 
-        var consoleWidth = AnsiConsole.Console.Profile.Width;
+        var consoleWidth = console.Profile.Width;
         var leftPad = Math.Max(0, (consoleWidth - width) / 2);
         var padding = new string(' ', leftPad);
 
-        AnsiConsole.WriteLine();
-        AnsiConsole.MarkupLine($"{padding}[cyan]{borderTop}[/]");
+        console.WriteLine();
+        console.MarkupLine($"{padding}[cyan]{borderTop}[/]");
 
         // Render logo centered
         foreach (var line in DungeonLogo)
@@ -186,21 +170,21 @@ public static class SplashScreen
             var linePad = Math.Max(0, (width - line.Length - 2) / 2);
             var content = new string(' ', linePad) + line;
             content = content.PadRight(width - 2);
-            AnsiConsole.MarkupLine($"{padding}[cyan]║[/][bold cyan]{Markup.Escape(content)}[/][cyan]║[/]");
+            console.MarkupLine($"{padding}[cyan]║[/][bold cyan]{Markup.Escape(content)}[/][cyan]║[/]");
         }
 
         // Empty line
-        AnsiConsole.MarkupLine($"{padding}[cyan]║{new string(' ', width - 2)}║[/]");
+        console.MarkupLine($"{padding}[cyan]║{new string(' ', width - 2)}║[/]");
 
         // Subtitle
         var subtitle = "⚔ A Dungeon Crawler That Teaches Git ⚔";
         var subPad = Math.Max(0, (width - subtitle.Length - 2) / 2);
         var subContent = new string(' ', subPad) + subtitle;
         subContent = subContent.PadRight(width - 2);
-        AnsiConsole.MarkupLine($"{padding}[cyan]║[/][bold yellow]{subContent}[/][cyan]║[/]");
+        console.MarkupLine($"{padding}[cyan]║[/][bold yellow]{subContent}[/][cyan]║[/]");
 
         // Empty line
-        AnsiConsole.MarkupLine($"{padding}[cyan]║{new string(' ', width - 2)}║[/]");
+        console.MarkupLine($"{padding}[cyan]║{new string(' ', width - 2)}║[/]");
 
         // Features section
         var features = new[]
@@ -215,11 +199,11 @@ public static class SplashScreen
         {
             var featureText = $"  {icon} {text}";
             var featureContent = featureText.PadRight(width - 2);
-            AnsiConsole.MarkupLine($"{padding}[cyan]║[/][dim]{featureContent}[/][cyan]║[/]");
+            console.MarkupLine($"{padding}[cyan]║[/][dim]{featureContent}[/][cyan]║[/]");
         }
 
         // Empty line
-        AnsiConsole.MarkupLine($"{padding}[cyan]║{new string(' ', width - 2)}║[/]");
+        console.MarkupLine($"{padding}[cyan]║{new string(' ', width - 2)}║[/]");
 
         // Dungeon entrance art (simplified)
         var entranceArt = new[]
@@ -237,30 +221,30 @@ public static class SplashScreen
             var artPad = Math.Max(0, (width - line.Length - 2) / 2);
             var artContent = new string(' ', artPad) + line;
             artContent = artContent.PadRight(width - 2);
-            AnsiConsole.MarkupLine($"{padding}[cyan]║[/][grey]{Markup.Escape(artContent)}[/][cyan]║[/]");
+            console.MarkupLine($"{padding}[cyan]║[/][grey]{Markup.Escape(artContent)}[/][cyan]║[/]");
         }
 
         // Empty line
-        AnsiConsole.MarkupLine($"{padding}[cyan]║{new string(' ', width - 2)}║[/]");
+        console.MarkupLine($"{padding}[cyan]║{new string(' ', width - 2)}║[/]");
 
         // Commands hint
         var cmdHint = "Type 'help' for commands • 'quit' to exit";
         var cmdPad = Math.Max(0, (width - cmdHint.Length - 2) / 2);
         var cmdContent = new string(' ', cmdPad) + cmdHint;
         cmdContent = cmdContent.PadRight(width - 2);
-        AnsiConsole.MarkupLine($"{padding}[cyan]║[/][dim italic]{cmdContent}[/][cyan]║[/]");
+        console.MarkupLine($"{padding}[cyan]║[/][dim italic]{cmdContent}[/][cyan]║[/]");
 
         // Bottom border
-        AnsiConsole.MarkupLine($"{padding}[cyan]{borderBot}[/]");
-        AnsiConsole.WriteLine();
+        console.MarkupLine($"{padding}[cyan]{borderBot}[/]");
+        console.WriteLine();
 
         // Git commands preview
-        RenderGitPreview(padding, width);
+        RenderGitPreview(console, padding, width);
 
-        AnsiConsole.WriteLine();
+        console.WriteLine();
     }
 
-    private static void RenderGitPreview(string padding, int width)
+    private static void RenderGitPreview(IAnsiConsole console, string padding, int width)
     {
         var table = new Table()
             .Border(TableBorder.Rounded)
@@ -283,6 +267,6 @@ public static class SplashScreen
 
         table.AddRow(commands);
 
-        AnsiConsole.Write(new Padder(table).PadLeft(padding.Length));
+        console.Write(new Padder(table).PadLeft(padding.Length));
     }
 }
