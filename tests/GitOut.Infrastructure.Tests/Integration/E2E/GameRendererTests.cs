@@ -51,9 +51,9 @@ public class GameRendererTests
         var renderer = new GameRenderer(console);
 
         var result = new CommandResult(
-            success: true,
-            message: "Available Commands:\n- help: Show this help\n- look: Look around",
-            type: CommandType.Help
+            Success: true,
+            Message: "Available Commands:\n- help: Show this help\n- look: Look around",
+            Type: CommandType.Help
         );
 
         // Act
@@ -73,9 +73,9 @@ public class GameRendererTests
         var renderer = new GameRenderer(console);
 
         var result = new CommandResult(
-            success: true,
-            message: "Initialized empty Git repository",
-            type: CommandType.Git
+            Success: true,
+            Message: "Initialized empty Git repository",
+            Type: CommandType.Git
         );
 
         // Act
@@ -94,9 +94,9 @@ public class GameRendererTests
         var renderer = new GameRenderer(console);
 
         var result = new CommandResult(
-            success: false,
-            message: "fatal: not a git repository",
-            type: CommandType.Git
+            Success: false,
+            Message: "fatal: not a git repository",
+            Type: CommandType.Git
         );
 
         // Act
@@ -116,9 +116,9 @@ public class GameRendererTests
         var renderer = new GameRenderer(console);
 
         var result = new CommandResult(
-            success: true,
-            message: "Initialized empty Git repository\n\n✓ Challenge completed! You've mastered git init!",
-            type: CommandType.Git
+            Success: true,
+            Message: "Initialized empty Git repository\n\n✓ Challenge completed! You've mastered git init!",
+            Type: CommandType.Git
         );
 
         // Act
@@ -196,7 +196,7 @@ public class GameRendererTests
             id: "quiz-1",
             description: "Test your knowledge",
             question: "What command initializes a repo?",
-            options: new[] { "git init", "git start", "git create" },
+            options: new List<string> { "git init", "git start", "git create" },
             correctAnswerIndex: 0
         );
 
@@ -233,9 +233,9 @@ public class GameRendererTests
         var renderer = new GameRenderer(console);
 
         var result = new CommandResult(
-            success: true,
-            message: "That's correct! Well done!",
-            type: CommandType.Answer
+            Success: true,
+            Message: "That's correct! Well done!",
+            Type: CommandType.Answer
         );
 
         // Act
@@ -254,9 +254,9 @@ public class GameRendererTests
         var renderer = new GameRenderer(console);
 
         var result = new CommandResult(
-            success: false,
-            message: "That's not right. Try again!",
-            type: CommandType.Answer
+            Success: false,
+            Message: "That's not right. Try again!",
+            Type: CommandType.Answer
         );
 
         // Act
@@ -275,9 +275,9 @@ public class GameRendererTests
         var renderer = new GameRenderer(console);
 
         var result = new CommandResult(
-            success: true,
-            message: "Try using git init to initialize the repository",
-            type: CommandType.Hint
+            Success: true,
+            Message: "Try using git init to initialize the repository",
+            Type: CommandType.Hint
         );
 
         // Act
@@ -297,9 +297,9 @@ public class GameRendererTests
         var renderer = new GameRenderer(console);
 
         var result = new CommandResult(
-            success: true,
-            message: "You move forward into the next room...",
-            type: CommandType.Movement
+            Success: true,
+            Message: "You move forward into the next room...",
+            Type: CommandType.Movement
         );
 
         // Act
@@ -318,9 +318,9 @@ public class GameRendererTests
         var renderer = new GameRenderer(console);
 
         var result = new CommandResult(
-            success: false,
-            message: "You must complete the current room's challenge first!",
-            type: CommandType.Movement
+            Success: false,
+            Message: "You must complete the current room's challenge first!",
+            Type: CommandType.Movement
         );
 
         // Act
